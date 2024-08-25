@@ -10,7 +10,9 @@ function Navbar() {
 
     return (
         <div className="flex items-center justify-between py-5 font-medium">
-            <Link to='/'>Title</Link>
+            <Link to='/'>
+                <img className='w-48' src={assets.logo} alt="logo" />
+            </Link>
             <ul className="hidden sm:flex gap-5 text-sm text-gray-700">
                 <NavLink to='/' className='flex flex-col gap-1 items-center'>
                     <p>HOME</p>
