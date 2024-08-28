@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 function Login() {
     const [currentState, setCurrentState] = useState('Sign Up');
     const [formData, setFormData] = useState({ name: '', email: '', password: '' });
+    const navigate = useNavigate();
 
     const onChangeHandler = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -13,19 +16,60 @@ function Login() {
     const onSubmitHandler = async (e) => {
         e.preventDefault();
 
+        const url = currentState === 'Sign Up'
+            ? 'http://localhost:5000/api/auth/createuser'
+            : 'http://localhost:5000/api/auth/login';
+
         try {
+            const response = await axios.post(url, formData, {
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+
             if (currentState === 'Sign Up') {
-                console.log('Signing up with:', formData);
-                toast.success('Signed up successfully!');
-                setFormData({ name: '', email: '', password: '' })
+                toast.success('Signed Up Successfully');
+                setFormData({ name: '', email: '', password: '' });
+                navigate('/'); // Redirect to home
             } else {
-                console.log('Logging in with:', { email: formData.email, password: formData.password });
-                toast.success('Logged in successfully!');
+                if (response.data.success) {
+                    localStorage.setItem('token', response.data.authToken);
+                    toast.success('Logged In Successfully');
+                    navigate('/'); // Redirect to home
+                }
             }
         } catch (error) {
-            toast.error('Something went wrong, please try again.');
+            if (error.response) {
+                // Check for specific backend error messages
+                if (error.response.data.error) {
+                    switch (error.response.data.error) {
+                        case 'Email already in use. Please use a different email.':
+                            toast.error('This email is already registered. Please use a different email.');
+                            break;
+                        case 'Invalid email or password.':
+                            toast.error('Invalid email or password. Please try again.');
+                            break;
+                        case 'User not found.':
+                            toast.error('No user found with this email.');
+                            break;
+                        default:
+                            toast.error(`Error: ${error.response.data.message || 'Something went wrong'}`);
+                            break;
+                    }
+                } else {
+                    toast.error(`Error: ${error.response.data.message || 'Something went wrong'}`);
+                }
+            } else if (error.request) {
+                console.error('Request error:', error.request);
+                toast.error('No response from server. Please try again later.');
+            } else {
+                console.error('Error message:', error.message);
+                toast.error('An unexpected error occurred. Please try again.');
+            }
         }
-    };
+
+    }
+
 
     return (
         <div>

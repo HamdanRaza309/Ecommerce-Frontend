@@ -6,13 +6,13 @@ const jwt = require('jsonwebtoken');
 const router = express.Router();
 const fetchuser = require('../middleware/fetchuser');
 
-const JWT_SECRET = process.env.JWT_KEY;
+const JWT_SECRET = process.env.JWT_SECRET || 'your-jwt-secret-key';
 
 // ROUTE 1: Create a new user using: POST "/api/auth/createuser". No login required.
 router.post('/createuser', [
-    body('name', 'Enter a valid Name').isLength({ min: 5 }),
-    body('email', 'Enter a valid Email').isEmail(),
-    body('password', 'Enter a valid Password').isLength({ min: 5 }),
+    body('name', 'Name must be at least 5 characters long').isLength({ min: 5 }),
+    body('email', 'Invalid email format').isEmail(),
+    body('password', 'Password must be at least 5 characters long').isLength({ min: 5 }),
 ], async (req, res) => {
     let success = false;
 
@@ -24,22 +24,20 @@ router.post('/createuser', [
     try {
         let user = await User.findOne({ email: req.body.email });
         if (user) {
-            return res.status(400).json({ success, error: "A user with this email already exists." });
+            return res.status(400).json({ success, error: "Email already in use. Please use a different email." });
         }
 
         const salt = await bcrypt.genSalt(10);
-        const securePassword = await bcrypt.hash(req.body.password, salt);
+        const hashedPassword = await bcrypt.hash(req.body.password, salt);
 
         user = await User.create({
             name: req.body.name,
             email: req.body.email,
-            password: securePassword,
+            password: hashedPassword,
         });
 
         const data = {
-            user: {
-                id: user.id
-            }
+            user: { id: user.id }
         };
         const authToken = jwt.sign(data, JWT_SECRET);
 
@@ -53,14 +51,14 @@ router.post('/createuser', [
 
 // ROUTE 2: Authenticate a user using: POST "/api/auth/login". No login required.
 router.post('/login', [
-    body('email', 'Enter a valid Email').isEmail(),
-    body('password', 'Password cannot be blank').exists(),
+    body('email', 'Invalid email format').isEmail(),
+    body('password', 'Password cannot be empty').exists(),
 ], async (req, res) => {
     let success = false;
 
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
+        return res.status(400).json({ success, errors: errors.array() });
     }
 
     const { email, password } = req.body;
@@ -70,15 +68,13 @@ router.post('/login', [
             return res.status(400).json({ success, error: 'Invalid email or password.' });
         }
 
-        const passwordCompare = await bcrypt.compare(password, user.password);
-        if (!passwordCompare) {
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (!isMatch) {
             return res.status(400).json({ success, error: 'Invalid email or password.' });
         }
 
         const data = {
-            user: {
-                id: user.id
-            }
+            user: { id: user.id }
         };
         const authToken = jwt.sign(data, JWT_SECRET);
 
