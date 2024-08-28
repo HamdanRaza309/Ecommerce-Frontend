@@ -5,7 +5,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 function Login() {
-    const [currentState, setCurrentState] = useState('Sign Up');
+    const [currentState, setCurrentState] = useState('Log In');
     const [formData, setFormData] = useState({ name: '', email: '', password: '' });
     const navigate = useNavigate();
 
@@ -30,6 +30,7 @@ function Login() {
             if (currentState === 'Sign Up') {
                 toast.success('Signed Up Successfully');
                 setFormData({ name: '', email: '', password: '' });
+                localStorage.setItem('token', response.data.authToken);
                 navigate('/'); // Redirect to home
             } else {
                 if (response.data.success) {
