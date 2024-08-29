@@ -15,6 +15,10 @@ const ShopContextProvider = ({ children }) => {
     const navigate = useNavigate();
 
     const addToCart = async (itemId, productSize) => {
+        if (!localStorage.getItem('token')) {
+            toast.info('You need to Login');
+            navigate('/login');
+        }
         if (!productSize) {
             toast.error('Select Product Size');
             return;

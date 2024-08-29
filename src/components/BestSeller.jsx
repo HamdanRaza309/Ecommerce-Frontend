@@ -19,7 +19,7 @@ function BestSeller() {
             <div className="text-center py-8 text-3xl">
                 <Title text1={'BEST'} text2={'SELLER'} />
                 <p className='w-3/4 m-auto text-xs sm:text-sm md:text-base text-gray-600'>
-                    Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nostrum, illum earum nisi dolorem eaque hic praesentium labore. Dolore ullam, quasi, iste error recusandae ut provident alias enim perspiciatis nihil neque.
+                    Explore our best-selling items that our customers love the most. These top-rated products are known for their quality, style, and timeless appeal. Don’t miss out on what everyone’s talking about!
                 </p>
             </div>
 
@@ -35,7 +35,7 @@ function BestSeller() {
                     />
                 ))}
             </div>
-        </div>
+        </div >
     );
 }
 

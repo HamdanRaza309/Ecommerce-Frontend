@@ -7,7 +7,7 @@ function Footer() {
             <div className="flex flex-col sm:grid grid-cols-[3fr_1fr_1fr] gap-14 my-10 mt-40 text-sm">
                 <div>
                     <img className='mb-5 w-52' src={assets.logo} alt="logo" />
-                    <p className='w-full md:w-2/3 text-gray-600'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto et vero rerum, est reprehenderit in voluptas. Lorem ipsum dolor sit amet consectetur adipisicing elit. Praesentium similique minima dicta minus quasi, commodi suscipit dolores ullam nesciunt repudiandae?</p>
+                    <p className='w-full md:w-2/3 text-gray-600'>Fashion Closet offers the latest in fashion trends for men and women. Explore our collection of stylish apparel, accessories, and footwear. We’re dedicated to providing high-quality products at affordable prices, helping you look your best every day.</p>
                 </div>
                 <div>
                     <p className='text-xl font-medium mb-5'>COMPANY</p>

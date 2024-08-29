@@ -1,17 +1,61 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Title from "../components/Title";
 import { assets } from "../frontend_assets/assets";
 import NewsLetterBox from '../components/NewsLetterBox';
+import { toast } from 'react-toastify';
 
 function Contact() {
+    const [formData, setFormData] = useState({
+        name: '',
+        email: '',
+        message: ''
+    });
+
+    const handleChange = (e) => {
+        setFormData({
+            ...formData,
+            [e.target.name]: e.target.value
+        });
+    };
+
+    // used web3react form
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        const formData = new FormData(e.target);
+
+        formData.append("access_key", "77aa2997-d815-4289-9c54-24ac2fc2d4be");
+
+        const object = Object.fromEntries(formData);
+        const json = JSON.stringify(object);
+
+        const res = await fetch("https://api.web3forms.com/submit", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Accept: "application/json"
+            },
+            body: json
+        }).then((res) => res.json());
+
+        if (res.success) {
+            // console.log("Success", res);
+            toast.success('Your form has been submitted, Stay tuned for reply.');
+            setFormData({
+                name: '',
+                email: '',
+                message: ''
+            })
+        }
+    };
+
     return (
-        <div>
+        <div className="px-4">
             <div className='text-center text-2xl pt-10 border-t'>
                 <Title text1={'CONTACT'} text2={'US'} />
             </div>
             <div className='my-10 mb-28 gap-10 flex flex-col justify-center md:flex-row'>
-                <img className='w-full md:max-w-[480px]' src={assets.contact_img} alt="Fashion Closet Store" />
-                <div className='flex flex-col justify-center items-start gap-6'>
+                <img className='w-full md:max-w-[480px] object-cover' src={assets.contact_img} alt="Fashion Closet Store" />
+                <div className='flex flex-col justify-center items-start gap-6 px-4 md:px-0'>
                     <p className='font-semibold text-xl text-gray-600'>Visit Our Store</p>
                     <p className='text-gray-500'>Maini Topi, Swabi <br /> Khyber Pakhtoon Khwa, Pakistan</p>
                     <p className='text-gray-500'>Phone: +10-293-8475 <br /> Email: fashioncloset@gmail.com</p>
@@ -33,17 +77,48 @@ function Contact() {
                     </div>
                 </div>
             </div>
-            <div className='my-10'>
-                <div className='text-center text-xl font-semibold text-gray-600 mb-4'>
-                    <Title text1={'CUSTOMER'} text2={'SERVICE HOURS'} />
-                </div>
-                <div className='text-center text-gray-500'>
-                    <p>Monday - Friday: 9:00 AM - 6:00 PM</p>
-                    <p>Saturday: 10:00 AM - 4:00 PM</p>
-                    <p>Sunday: Closed</p>
+            <div className='flex flex-col md:flex-row gap-10 items-center'>
+                <div className='my-10 w-full'>
+                    <div className='text-center text-xl font-semibold text-gray-600 mb-4'>
+                        <Title text1={"LET'S"} text2={'TALK'} />
+                    </div>
+                    <form className='flex flex-col items-center gap-4' onSubmit={handleSubmit}>
+                        <input
+                            type="text"
+                            name="name"
+                            value={formData.name}
+                            onChange={handleChange}
+                            placeholder="Your Name"
+                            className="w-full md:w-4/5 lg:w-2/3 p-2 border border-gray-300 rounded"
+                            required
+                        />
+                        <input
+                            type="email"
+                            name="email"
+                            value={formData.email}
+                            onChange={handleChange}
+                            placeholder="Your Email"
+                            className="w-full md:w-4/5 lg:w-2/3 p-2 border border-gray-300 rounded"
+                            required
+                        />
+                        <textarea
+                            name="message"
+                            value={formData.message}
+                            onChange={handleChange}
+                            placeholder="Your Message"
+                            className="w-full md:w-4/5 lg:w-2/3 p-2 border border-gray-300 rounded"
+                            rows="5"
+                            required
+                        ></textarea>
+                        <button
+                            type="submit"
+                            className="px-8 py-3 text-sm text-white bg-black hover:bg-gray-800 transition-all duration-500 rounded"
+                        >
+                            Send Message
+                        </button>
+                    </form>
                 </div>
             </div>
-
             <hr />
 
             <div className='my-10'>
