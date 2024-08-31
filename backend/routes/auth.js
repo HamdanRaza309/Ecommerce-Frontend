@@ -6,7 +6,7 @@ const jwt = require('jsonwebtoken');
 const router = express.Router();
 const fetchuser = require('../middleware/fetchuser');
 
-const JWT_SECRET = process.env.JWT_SECRET || 'your-jwt-secret-key';
+const JWT_SECRET = process.env.JWT_SECRET || 'hamdanhrhd';
 
 // ROUTE 1: Create a new user using: POST "/api/auth/createuser". No login required.
 router.post('/createuser', [
@@ -30,19 +30,23 @@ router.post('/createuser', [
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(req.body.password, salt);
 
+        // Default to 'user' role or set to 'admin' if the specific email is provided
+        const role = req.body.email === 'hamdan@admin.com' ? 'admin' : 'user';
+
         user = await User.create({
             name: req.body.name,
             email: req.body.email,
             password: hashedPassword,
+            role: role // Set the role based on email
         });
 
         const data = {
-            user: { id: user.id }
+            user: { id: user.id, role: user.role }
         };
         const authToken = jwt.sign(data, JWT_SECRET);
 
         success = true;
-        res.json({ success, authToken });
+        res.json({ success, authToken, role: user.role });
     } catch (error) {
         console.error("Error creating user:", error.message);
         res.status(500).json({ success, error: 'Internal Server Error. Please try again later.' });
@@ -74,12 +78,12 @@ router.post('/login', [
         }
 
         const data = {
-            user: { id: user.id }
+            user: { id: user.id, role: user.role }
         };
         const authToken = jwt.sign(data, JWT_SECRET);
 
         success = true;
-        res.json({ success, authToken });
+        res.json({ success, authToken, role: user.role });
     } catch (error) {
         console.error("Error logging in:", error.message);
         res.status(500).json({ success, error: 'Internal Server Error. Please try again later.' });
