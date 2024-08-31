@@ -31,7 +31,7 @@ router.post('/createuser', [
         const hashedPassword = await bcrypt.hash(req.body.password, salt);
 
         // Default to 'user' role or set to 'admin' if the specific email is provided
-        const role = req.body.email === 'hamdan@admin.com' ? 'admin' : 'user';
+        const role = req.body.email === 'fashioncloset@admin.com' ? 'admin' : 'user';
 
         user = await User.create({
             name: req.body.name,

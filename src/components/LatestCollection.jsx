@@ -10,7 +10,7 @@ function LatestCollection() {
 
     useEffect(() => {
         if (products && products.length > 0) {
-            setLatestProducts(products.slice(0, 10))
+            setLatestProducts(products.slice(10, 20))
         }
     }, [])
 

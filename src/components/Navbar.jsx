@@ -10,7 +10,6 @@ function Navbar() {
     const navigate = useNavigate();
 
     const isLoggedIn = !!localStorage.getItem('token');
-    console.log(isLoggedIn);
 
     const handleLogout = () => {
         localStorage.removeItem('token');

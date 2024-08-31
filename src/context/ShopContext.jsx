@@ -88,13 +88,21 @@ const ShopContextProvider = ({ children }) => {
             const response = await axios.post('http://localhost:5000/api/product/addproduct', productInfo, {
                 headers: {
                     'Content-Type': 'application/json',
+                    'auth-token': `Bearer ${localStorage.getItem('token')}`
                 }
             });
-            console.log(response.data);  // Log the response from the server
+            // console.log('Product added successfully:', response.data);
+            toast.success('Product added successfully.');
+
         } catch (error) {
-            console.error('Error adding product:', error);  // Log the error details
+            const errorMessage = error.response
+                ? error.response.data.message || 'An error occurred while adding the product.'
+                : 'Network error. Please try again later.';
+            console.error('Error adding product:', errorMessage);
+            toast.error(errorMessage);
         }
     };
+
 
     const value = {
         products,
