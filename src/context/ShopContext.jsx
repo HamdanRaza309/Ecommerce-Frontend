@@ -2,6 +2,7 @@ import { createContext, useEffect, useState } from "react";
 import { products } from "../frontend_assets/assets";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 // Create the context
 export const ShopContext = createContext();
@@ -81,6 +82,20 @@ const ShopContextProvider = ({ children }) => {
         return totalAmount;
     }
 
+    // add product to DB
+    const addProduct = async (productInfo) => {
+        try {
+            const response = await axios.post('http://localhost:5000/api/product/addproduct', productInfo, {
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+            console.log(response.data);  // Log the response from the server
+        } catch (error) {
+            console.error('Error adding product:', error);  // Log the error details
+        }
+    };
+
     const value = {
         products,
         currency,
@@ -95,6 +110,7 @@ const ShopContextProvider = ({ children }) => {
         updateQuantity,
         getCartAmount,
         navigate,
+        addProduct,
     };
 
     return (

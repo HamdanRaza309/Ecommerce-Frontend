@@ -5,6 +5,18 @@ const router = express.Router();
 // Route: Add a new product
 router.post('/addproduct', async (req, res) => {
     try {
+        const { name } = req.body;
+
+        // Check if a product with the same name, description or images already exists
+        const existingProduct = await Product.findOne({
+            name,
+        });
+
+        if (existingProduct) {
+            return res.status(400).json({ message: 'A product with the same name already exists' });
+        }
+
+        // If no duplicate is found, save the new product
         const product = new Product(req.body);
         await product.save();
         res.status(201).json({ message: 'Product added successfully' });
@@ -12,6 +24,8 @@ router.post('/addproduct', async (req, res) => {
         res.status(400).json({ message: 'Error adding product', error });
     }
 });
+
+
 
 // Route: Delete a product by ID
 router.delete('/deleteproduct/:id', async (req, res) => {

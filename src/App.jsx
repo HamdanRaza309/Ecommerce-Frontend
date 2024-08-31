@@ -6,6 +6,7 @@ import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import SearchBar from './components/SearchBar';
 import Spinner from './components/Spinner';
+import AddProduct from './pages/AddProduct';
 
 // Lazy load the components
 const Home = lazy(() => import('./pages/Home'));
@@ -35,6 +36,7 @@ const App = () => {
           <Route path='/login' element={<Login />} />
           <Route path='/place-order' element={<PlaceOrder />} />
           <Route path='/orders' element={<Orders />} />
+          <Route path='/addProduct' element={<AddProduct />} />
         </Routes>
       </Suspense>
       <Footer />

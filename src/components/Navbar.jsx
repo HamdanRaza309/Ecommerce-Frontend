@@ -21,6 +21,10 @@ function Navbar() {
         navigate('/login');
     }
 
+    const handleAddProduct = () => {
+        navigate('/addProduct');
+    }
+
     return (
         <div className="flex items-center justify-between py-5 font-medium">
             <Link to='/'>
@@ -56,6 +60,7 @@ function Navbar() {
                                     <>
                                         <p className='cursor-pointer hover:text-black'>My Profile</p>
                                         <p className='cursor-pointer hover:text-black'>Orders</p>
+                                        <p onClick={handleAddProduct} className='cursor-pointer hover:text-black'>Add Product</p>
                                         <p onClick={handleLogout} className='cursor-pointer hover:text-black'>Logout</p>
                                     </>
                                     :
