@@ -4,15 +4,25 @@ import Title from './Title';
 import ProductItem from './ProductItem';
 
 function BestSeller() {
-    const { products } = useContext(ShopContext);
+    const { readProducts } = useContext(ShopContext);
     const [bestSeller, setBestSeller] = useState([]);
 
     useEffect(() => {
-        if (products && products.length > 0) {
-            const bestProduct = products.filter((item) => item.bestseller);
-            setBestSeller(bestProduct.slice(0, 5));
-        }
-    }, []);
+        const fetchedProducts = async () => {
+            try {
+                const productsData = await readProducts();
+                if (productsData && productsData.length > 0) {
+                    const bestProduct = productsData.filter((item) => item.bestseller);
+                    setBestSeller(bestProduct.slice(0, 5));
+                }
+            } catch (error) {
+                console.error("Failed to fetch products", error);
+                setBestSeller([])
+            }
+        };
+
+        fetchedProducts();
+    }, [readProducts]);
 
     return (
         <div className="my-10">
@@ -25,9 +35,9 @@ function BestSeller() {
 
             {/* Rendering Products */}
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 gap-y-6">
-                {bestSeller.map((item) => (
+                {bestSeller.map((item, index) => (
                     <ProductItem
-                        key={item._id}
+                        key={index}
                         id={item._id}
                         image={item.image}
                         name={item.name}

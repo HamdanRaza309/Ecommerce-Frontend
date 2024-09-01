@@ -5,15 +5,25 @@ import ProductItem from './ProductItem';
 
 function LatestCollection() {
 
-    const { products } = useContext(ShopContext);
+    const { readProducts } = useContext(ShopContext);
     const [latestProducts, setLatestProducts] = useState([]);
 
     useEffect(() => {
-        if (products && products.length > 0) {
-            setLatestProducts(products.slice(10, 20))
-        }
-    }, [])
+        const fetchedProducts = async () => {
+            try {
+                const productsData = await readProducts();
+                if (productsData && productsData.length > 0) {
+                    setLatestProducts(productsData.slice(10, 20))
 
+                }
+            } catch (error) {
+                console.error("Failed to fetch products", error);
+                setLatestProducts([])
+            }
+        };
+
+        fetchedProducts();
+    }, [readProducts]);
 
     return (
         <div className="my-10">

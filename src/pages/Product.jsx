@@ -1,39 +1,47 @@
-import React, { useContext, useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import React, { useContext, useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import { ShopContext } from '../context/ShopContext';
 import { assets } from '../frontend_assets/assets';
 import ReletedProduct from '../components/ReletedProduct';
 
 function Product() {
-    const { productId } = useParams();
-    const { products, currency, addToCart } = useContext(ShopContext);
+    const { id } = useParams();
+    const { readProducts, currency, addToCart } = useContext(ShopContext);
     const [productData, setProductData] = useState(null);
     const [image, setImage] = useState('');
-    const [size, setSize] = useState('')
+    const [size, setSize] = useState('');
 
-    const fetchProduct = () => {
-        products.forEach((item) => {
-            if (item._id === productId) {
-                setProductData(item);
-                setImage(item.image[0]);
+    const fetchProduct = async () => {
+        try {
+            const products = await readProducts();
+            // console.log(products);
+            const foundProduct = products.find(item => item._id === id);
+
+            if (foundProduct) {
+                setProductData(foundProduct);
+                setImage(foundProduct.image?.[0] || '');
+            } else {
+                console.error('Product not found');
+                setProductData(null);
             }
-        });
-    }
+        } catch (error) {
+            console.error("Failed to fetch products", error);
+            setProductData(null);
+        }
+    };
 
     useEffect(() => {
         fetchProduct();
-    }, [productId, products]);
+    }, [id]);
 
     return productData ? (
         <div className='border-t-2 pt-10 transition-opacity ease-in-out duration-500 opacity-100'>
-
             {/* Product Data */}
-            <div className='flex gap-12 sm:gap-12 flex-col sm:flex-row '>
-
+            <div className='flex gap-12 sm:gap-12 flex-col sm:flex-row'>
                 {/* Product Images */}
                 <div className="flex-1 flex flex-col-reverse sm:flex-row gap-3">
                     <div className="flex flex-col overflow-x-auto sm:overflow-y-scroll justify-between sm:justify-normal sm:w-[18.7%] w-full">
-                        {productData.image.map((item, index) => (
+                        {productData.image?.map((item, index) => (
                             <img
                                 src={item}
                                 key={index}
@@ -49,6 +57,7 @@ function Product() {
                         <img src={image} alt="Selected Product" className='w-full h-auto' />
                     </div>
                 </div>
+
                 {/* Product Information */}
                 <div className="flex-1">
                     <h1 className='font-medium text-2xl mt-2'>{productData.name}</h1>
@@ -65,14 +74,23 @@ function Product() {
                     <div className="flex flex-col gap-4 my-8">
                         <p>Select Size</p>
                         <div className="flex gap-2">
-                            {
-                                productData.sizes.map((item, index) => (
-                                    <button onClick={() => setSize(item)} className={`border py-2 px-4 bg-gray-100 ${item === size ? 'border-orange-500' : ''}`} key={index}>{item}</button>
-                                ))
-                            }
+                            {productData.sizes?.map((item, index) => (
+                                <button
+                                    onClick={() => setSize(item)}
+                                    className={`border py-2 px-4 bg-gray-100 ${item === size ? 'border-orange-500' : ''}`}
+                                    key={index}
+                                >
+                                    {item}
+                                </button>
+                            ))}
                         </div>
                     </div>
-                    <button onClick={() => addToCart(productData._id, size)} className='bg-black text-white px-8 py-3 text-sm active:bg-gray-700'>ADD TO CART</button>
+                    <button
+                        onClick={() => addToCart(productData._id, size)}
+                        className='bg-black text-white px-8 py-3 text-sm active:bg-gray-700'
+                    >
+                        ADD TO CART
+                    </button>
                     <hr className='mt-8 sm:w-4/5' />
                     <div className='text-sm text-gray-500 mt-5 flex flex-col gap-1'>
                         <p>100% Original Product</p>
@@ -93,7 +111,7 @@ function Product() {
                 </div>
             </div>
 
-            {/* Display Releted Products */}
+            {/* Display Related Products */}
             <ReletedProduct category={productData.category} subCategory={productData.subCategory} />
         </div>
     ) : (

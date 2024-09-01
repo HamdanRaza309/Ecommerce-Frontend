@@ -1,5 +1,4 @@
 import { createContext, useEffect, useState } from "react";
-import { products } from "../frontend_assets/assets";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -13,6 +12,8 @@ const ShopContextProvider = ({ children }) => {
     const [search, setSearch] = useState('');
     const [showSearch, setShowSearch] = useState(true);
     const [cartItems, setCartItems] = useState({});
+    const [products, setProducts] = useState([]);
+    const [isProductsLoaded, setIsProductsLoaded] = useState(false);
     const navigate = useNavigate();
 
     const addToCart = async (itemId, productSize) => {
@@ -37,7 +38,6 @@ const ShopContextProvider = ({ children }) => {
             cartData[itemId][productSize] = 1;
         }
 
-        // console.log(cartData);
         setCartItems(cartData);
     };
 
@@ -45,11 +45,9 @@ const ShopContextProvider = ({ children }) => {
         let totalCount = 0;
         for (const items in cartItems) {
             for (const item in cartItems[items]) {
-                // console.log('cartItems[items]', cartItems[items]);
                 try {
                     if (cartItems[items][item] > 0) {
                         totalCount += cartItems[items][item];
-                        // console.log('cartItems[items][item]', cartItems[items][item]);
                     }
                 } catch (error) {
                     console.error("Error counting cart items:", error);
@@ -65,7 +63,7 @@ const ShopContextProvider = ({ children }) => {
         cartData[itemId][size] = quantity;
 
         setCartItems(cartData);
-    }
+    };
 
     const getCartAmount = () => {
         let totalAmount = 0;
@@ -78,11 +76,36 @@ const ShopContextProvider = ({ children }) => {
             }
         }
 
-        // console.log(totalAmount);
         return totalAmount;
-    }
+    };
 
-    // add product to DB
+    // Read products from DB
+    const readProducts = async () => {
+        // Check if products have already been loaded
+        if (isProductsLoaded) {
+            return products;
+        }
+
+        try {
+            const response = await axios.get('http://localhost:5000/api/product/products', {
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+            setProducts(response.data);
+            setIsProductsLoaded(true);  // Mark products as loaded
+            return response.data; // Return the data
+        } catch (error) {
+            console.error('Error fetching products:', error.message);
+            return []; // Return an empty array in case of error
+        }
+    };
+
+    useEffect(() => {
+        readProducts();
+    }, []);
+
+    // Add product to DB
     const addProduct = async (productInfo) => {
         try {
             const response = await axios.post('http://localhost:5000/api/product/addproduct', productInfo, {
@@ -91,7 +114,6 @@ const ShopContextProvider = ({ children }) => {
                     'auth-token': `Bearer ${localStorage.getItem('token')}`
                 }
             });
-            // console.log('Product added successfully:', response.data);
             toast.success('Product added successfully.');
 
         } catch (error) {
@@ -102,7 +124,6 @@ const ShopContextProvider = ({ children }) => {
             toast.error(errorMessage);
         }
     };
-
 
     const value = {
         products,
@@ -118,6 +139,7 @@ const ShopContextProvider = ({ children }) => {
         updateQuantity,
         getCartAmount,
         navigate,
+        readProducts,
         addProduct,
     };
 
