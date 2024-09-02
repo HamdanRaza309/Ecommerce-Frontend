@@ -79,7 +79,7 @@ const ShopContextProvider = ({ children }) => {
         return totalAmount;
     };
 
-    // Read products from DB
+    // READ products from DB
     const readProducts = async () => {
         // Check if products have already been loaded
         if (isProductsLoaded) {
@@ -101,21 +101,17 @@ const ShopContextProvider = ({ children }) => {
         }
     };
 
-    useEffect(() => {
-        readProducts();
-    }, []);
-
-    // Add product to DB
+    // ADD product to DB
     const addProduct = async (productInfo) => {
         try {
-            const response = await axios.post('http://localhost:5000/api/product/addproduct', productInfo, {
+            await axios.post('http://localhost:5000/api/product/addproduct', productInfo, {
                 headers: {
                     'Content-Type': 'application/json',
                     'auth-token': `Bearer ${localStorage.getItem('token')}`
                 }
             });
             toast.success('Product added successfully.');
-
+            await readProducts(); // Refresh the product list
         } catch (error) {
             const errorMessage = error.response
                 ? error.response.data.message || 'An error occurred while adding the product.'
@@ -124,6 +120,51 @@ const ShopContextProvider = ({ children }) => {
             toast.error(errorMessage);
         }
     };
+
+    // UPDATE product in DB
+    const updateProduct = async (id, productInfo) => {
+        try {
+            await axios.put(`http://localhost:5000/api/product/updateproduct/${id}`, productInfo, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'auth-token': `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+            toast.success('Product updated successfully.');
+            await readProducts(); // Refresh the product list
+        } catch (error) {
+            const errorMessage = error.response
+                ? error.response.data.message || 'An error occurred while updating the product.'
+                : 'Network error. Please try again later.';
+            console.error('Error updating product:', errorMessage);
+            toast.error('Something went wrong');
+        }
+    }
+
+    // DELETE product from DB
+    const deleteProduct = async (id) => {
+        try {
+            await axios.delete(`http://localhost:5000/api/product/deleteproduct/${id}`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'auth-token': `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+            toast.success('Product deleted successfully.');
+            await readProducts(); // Refresh the product list
+            navigate('/');
+        } catch (error) {
+            const errorMessage = error.response
+                ? error.response.data.message || 'An error occurred while deleting the product.'
+                : 'Network error. Please try again later.';
+            console.error('Error deleting product:', errorMessage);
+            toast.error('Something went wrong');
+        }
+    }
+
+    useEffect(() => {
+        readProducts();
+    }, []); // Only call readProducts once when the component mounts
 
     const value = {
         products,
@@ -141,6 +182,8 @@ const ShopContextProvider = ({ children }) => {
         navigate,
         readProducts,
         addProduct,
+        updateProduct,
+        deleteProduct,
     };
 
     return (

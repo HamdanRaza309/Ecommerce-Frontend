@@ -3,23 +3,34 @@ import { useParams } from 'react-router-dom';
 import { ShopContext } from '../context/ShopContext';
 import { assets } from '../frontend_assets/assets';
 import ReletedProduct from '../components/ReletedProduct';
+import Title from '../components/Title';
 
 function Product() {
     const { id } = useParams();
-    const { readProducts, currency, addToCart } = useContext(ShopContext);
+    const { updateProduct, deleteProduct, readProducts, currency, addToCart } = useContext(ShopContext);
     const [productData, setProductData] = useState(null);
     const [image, setImage] = useState('');
     const [size, setSize] = useState('');
+    const [open, setOpen] = useState(false);
+    const [productInfo, setProductInfo] = useState({
+        name: '',
+        price: '',
+        description: '',
+        sizes: [],
+        category: '',
+        subCategory: '',
+        images: [],
+        bestseller: false,
+    });
 
     const fetchProduct = async () => {
         try {
             const products = await readProducts();
-            // console.log(products);
             const foundProduct = products.find(item => item._id === id);
 
             if (foundProduct) {
                 setProductData(foundProduct);
-                setImage(foundProduct.image?.[0] || '');
+                setImage(foundProduct.images?.[0] || '');
             } else {
                 console.error('Product not found');
                 setProductData(null);
@@ -34,14 +45,66 @@ function Product() {
         fetchProduct();
     }, [id]);
 
+    const handleDelete = async () => {
+        await deleteProduct(id);
+    };
+
+    const handleUpdate = () => {
+        setOpen(true);
+        setProductInfo({
+            name: productData.name,
+            price: productData.price,
+            description: productData.description,
+            sizes: productData.sizes,
+            category: productData.category,
+            subCategory: productData.subCategory,
+            images: productData.images,
+            bestseller: productData.bestseller,
+        });
+    };
+
+    const handleChange = (e) => {
+        const { name, value, type, checked } = e.target;
+        setProductInfo({
+            ...productInfo,
+            [name]: type === 'checkbox' ? checked : value,
+        });
+    };
+
+    const handleSizeChange = (size) => {
+        setProductInfo((prevState) => ({
+            ...prevState,
+            sizes: prevState.sizes.includes(size)
+                ? prevState.sizes.filter((productSize) => productSize !== size)
+                : [...prevState.sizes, size],
+        }));
+    };
+
+    const handleImageUpload = (e) => {
+        const files = Array.from(e.target.files);
+        const newImages = files.map(file => URL.createObjectURL(file));
+        setProductInfo((prevState) => ({
+            ...prevState,
+            images: [...prevState.images, ...newImages].slice(0, 4),
+        }));
+    };
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        updateProduct(id, productInfo);
+        setOpen(false);
+    };
+
     return productData ? (
         <div className='border-t-2 pt-10 transition-opacity ease-in-out duration-500 opacity-100'>
-            {/* Product Data */}
+            <div className="flex">
+                <img onClick={handleDelete} src={assets.bin_icon} alt="delete img" />
+                <img onClick={handleUpdate} src={assets.edit_icon} alt="update img" />
+            </div>
             <div className='flex gap-12 sm:gap-12 flex-col sm:flex-row'>
-                {/* Product Images */}
                 <div className="flex-1 flex flex-col-reverse sm:flex-row gap-3">
                     <div className="flex flex-col overflow-x-auto sm:overflow-y-scroll justify-between sm:justify-normal sm:w-[18.7%] w-full">
-                        {productData.image?.map((item, index) => (
+                        {productData.images?.map((item, index) => (
                             <img
                                 src={item}
                                 key={index}
@@ -51,14 +114,10 @@ function Product() {
                             />
                         ))}
                     </div>
-
-                    {/* Main Image */}
                     <div className="w-full sm:w-[80%]">
                         <img src={image} alt="Selected Product" className='w-full h-auto' />
                     </div>
                 </div>
-
-                {/* Product Information */}
                 <div className="flex-1">
                     <h1 className='font-medium text-2xl mt-2'>{productData.name}</h1>
                     <div className="flex items-center gap-1 mt-2">
@@ -99,7 +158,6 @@ function Product() {
                     </div>
                 </div>
             </div>
-            {/* Description and Review Section */}
             <div className="mt-20">
                 <div className="flex">
                     <b className='border px-5 py-3 text-sm'>Description</b>
@@ -110,12 +168,159 @@ function Product() {
                     <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda quae labore corrupti, eos, ullam vero ipsam corporis, beatae provident ex atque sint quas laborum.</p>
                 </div>
             </div>
-
-            {/* Display Related Products */}
             <ReletedProduct category={productData.category} subCategory={productData.subCategory} />
+
+            {open && (
+                <div className="fixed inset-0 z-10 flex items-center justify-center bg-gray-500 bg-opacity-75 p-4">
+                    <div className="relative w-full max-w-2xl bg-white rounded-lg shadow-xl p-6 md:p-8 max-h-[90vh] overflow-auto">
+                        <div className="text-center text-2xl font-semibold mb-6">
+                            <Title text1="Update" text2="PRODUCT" />
+                        </div>
+                        <form onSubmit={handleSubmit} className="space-y-4">
+                            {/* Product Name and Price */}
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label htmlFor="name" className="block text-sm font-medium text-gray-700">Product Name</label>
+                                    <input
+                                        id="name"
+                                        name="name"
+                                        value={productInfo.name}
+                                        onChange={handleChange}
+                                        className="mt-1 block w-full border border-gray-300 rounded-md py-2 px-4 text-gray-900"
+                                        type="text"
+                                    />
+                                </div>
+                                <div>
+                                    <label htmlFor="price" className="block text-sm font-medium text-gray-700">Sale Price</label>
+                                    <input
+                                        id="price"
+                                        name="price"
+                                        value={productInfo.price}
+                                        onChange={handleChange}
+                                        className="mt-1 block w-full border border-gray-300 rounded-md py-2 px-4 text-gray-900"
+                                        type="number"
+                                    />
+                                </div>
+                            </div>
+
+                            {/* Category and Sub-Category */}
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label htmlFor="category" className="block text-sm font-medium text-gray-700">Category</label>
+                                    <input
+                                        id="category"
+                                        name="category"
+                                        value={productInfo.category}
+                                        onChange={handleChange}
+                                        className="mt-1 block w-full border border-gray-300 rounded-md py-2 px-4 text-gray-900"
+                                        type="text"
+                                    />
+                                </div>
+                                <div>
+                                    <label htmlFor="subCategory" className="block text-sm font-medium text-gray-700">Sub-Category</label>
+                                    <input
+                                        id="subCategory"
+                                        name="subCategory"
+                                        value={productInfo.subCategory}
+                                        onChange={handleChange}
+                                        className="mt-1 block w-full border border-gray-300 rounded-md py-2 px-4 text-gray-900"
+                                        type="text"
+                                    />
+                                </div>
+                            </div>
+
+                            {/* Product Sizes */}
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700">Sizes Available</label>
+                                <div className="mt-2 flex flex-wrap gap-4">
+                                    {['S', 'M', 'L', 'XL', 'XXL'].map((sizeOption, index) => (
+                                        <label key={index} className="inline-flex items-center">
+                                            <input
+                                                type="checkbox"
+                                                name="sizes"
+                                                value={sizeOption}
+                                                checked={productInfo.sizes.includes(sizeOption)}
+                                                onChange={() => handleSizeChange(sizeOption)}
+                                                className="form-checkbox h-5 w-5 text-green-600 focus:ring-green-600 accent-green-600"
+                                            />
+                                            <span className="ml-2 text-gray-700">{sizeOption}</span>
+                                        </label>
+                                    ))}
+                                </div>
+                            </div>
+
+                            {/* Description */}
+                            <div>
+                                <label htmlFor="description" className="block text-sm font-medium text-gray-700">Description</label>
+                                <textarea
+                                    id="description"
+                                    name="description"
+                                    value={productInfo.description}
+                                    onChange={handleChange}
+                                    rows="4"
+                                    className="mt-1 block w-full border border-gray-300 rounded-md py-2 px-4 text-gray-900"
+                                />
+                            </div>
+
+                            {/* Bestseller */}
+                            <div className="flex items-center space-x-2">
+                                <input
+                                    id="bestseller"
+                                    name="bestseller"
+                                    type="checkbox"
+                                    checked={productInfo.bestseller}
+                                    onChange={handleChange}
+                                    className="form-checkbox h-5 w-5 text-green-600 focus:ring-green-600 accent-green-600"
+                                />
+                                <label htmlFor="bestseller" className="text-sm font-medium text-gray-700 flex items-center space-x-2">
+                                    <span>Bestseller</span>
+                                </label>
+                            </div>
+
+
+                            {/* Image Upload */}
+                            <div>
+                                <label htmlFor="images" className="block text-sm font-medium text-gray-700">Upload Images (Max 4)</label>
+                                <input
+                                    id="images"
+                                    name="images"
+                                    type="file"
+                                    onChange={handleImageUpload}
+                                    multiple
+                                    className="mt-1 block w-full text-gray-900"
+                                />
+                                <div className="mt-4 flex gap-2 flex-wrap">
+                                    {productInfo.images.map((image, index) => (
+                                        <img key={index} src={image} alt={`Uploaded ${index + 1}`} className="w-24 h-24 object-cover rounded-md border border-gray-300" />
+                                    ))}
+                                </div>
+                            </div>
+
+                            <div className="flex justify-end gap-3 mt-6">
+                                <button
+                                    type="button"
+                                    onClick={() => setOpen(false)}
+                                    className="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400"
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    type="submit"
+                                    className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700"
+                                >
+                                    Save Changes
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+            )}
         </div>
     ) : (
-        <div className="opacity-0"></div>
+        <div className='text-center mt-20'>
+            <p>Product not found</p>
+        </div>
     );
 }
 
