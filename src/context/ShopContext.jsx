@@ -166,6 +166,18 @@ const ShopContextProvider = ({ children }) => {
         readProducts();
     }, []); // Only call readProducts once when the component mounts
 
+    // Helper function to decode JWT and get the role
+    const decodeToken = (token) => {
+        if (!token) return null;
+
+        const base64Url = token.split('.')[1];
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        const jsonPayload = decodeURIComponent(
+            atob(base64).split('').map(c => `%${('00' + c.charCodeAt(0).toString(16)).slice(-2)}`).join('')
+        );
+        return JSON.parse(jsonPayload);
+    };
+
     const value = {
         products,
         currency,
@@ -184,6 +196,7 @@ const ShopContextProvider = ({ children }) => {
         addProduct,
         updateProduct,
         deleteProduct,
+        decodeToken,
     };
 
     return (

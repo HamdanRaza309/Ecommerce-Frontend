@@ -6,12 +6,14 @@ import ReletedProduct from '../components/ReletedProduct';
 import Title from '../components/Title';
 
 function Product() {
+
     const { id } = useParams();
-    const { updateProduct, deleteProduct, readProducts, currency, addToCart } = useContext(ShopContext);
+    const { decodeToken, updateProduct, deleteProduct, readProducts, currency, addToCart } = useContext(ShopContext);
     const [productData, setProductData] = useState(null);
     const [image, setImage] = useState('');
     const [size, setSize] = useState('');
-    const [open, setOpen] = useState(false);
+    const [openUpdateModal, setOpenUpdateModal] = useState(false);
+    const [openDeleteModal, setOpenDeleteModal] = useState(false);
     const [productInfo, setProductInfo] = useState({
         name: '',
         price: '',
@@ -22,6 +24,10 @@ function Product() {
         images: [],
         bestseller: false,
     });
+
+    const token = localStorage.getItem('token');
+    const decoded = decodeToken(token);
+    const userRole = decoded?.user?.role;
 
     const fetchProduct = async () => {
         try {
@@ -45,12 +51,16 @@ function Product() {
         fetchProduct();
     }, [id]);
 
-    const handleDelete = async () => {
+    const handleDelete = () => {
+        setOpenDeleteModal(true);
+    }
+
+    const handleDeleteProduct = async () => {
         await deleteProduct(id);
     };
 
     const handleUpdate = () => {
-        setOpen(true);
+        setOpenUpdateModal(true);
         setProductInfo({
             name: productData.name,
             price: productData.price,
@@ -92,16 +102,34 @@ function Product() {
     const handleSubmit = (e) => {
         e.preventDefault();
         updateProduct(id, productInfo);
-        setOpen(false);
+        setOpenUpdateModal(false);
     };
 
     return productData ? (
         <div className='border-t-2 pt-10 transition-opacity ease-in-out duration-500 opacity-100'>
-            <div className="flex">
-                <img onClick={handleDelete} src={assets.bin_icon} alt="delete img" />
-                <img onClick={handleUpdate} src={assets.edit_icon} alt="update img" />
-            </div>
-            <div className='flex gap-12 sm:gap-12 flex-col sm:flex-row'>
+            {userRole === 'admin' && (
+                <div className='relative pt-10 transition-opacity ease-in-out duration-500 opacity-100'>
+                    <div className="absolute top-0 left-4 flex gap-4 z-10">
+                        {userRole === 'admin' && (
+                            <>
+                                <button
+                                    onClick={handleDelete}
+                                    className="bg-red-600 text-white px-4 py-2 shadow-lg hover:bg-red-700 transition-colors duration-300"
+                                >
+                                    DELETE
+                                </button>
+                                <button
+                                    onClick={handleUpdate}
+                                    className="bg-green-600 text-white px-4 py-2 shadow-lg hover:bg-green-700 transition-colors duration-300"
+                                >
+                                    UPDATE
+                                </button>
+                            </>
+                        )}
+                    </div>
+                </div>
+            )}
+            <div className='flex gap-12 sm:gap-12 flex-col sm:flex-row mt-10'>
                 <div className="flex-1 flex flex-col-reverse sm:flex-row gap-3">
                     <div className="flex flex-col overflow-x-auto sm:overflow-y-scroll justify-between sm:justify-normal sm:w-[18.7%] w-full">
                         {productData.images?.map((item, index) => (
@@ -121,11 +149,11 @@ function Product() {
                 <div className="flex-1">
                     <h1 className='font-medium text-2xl mt-2'>{productData.name}</h1>
                     <div className="flex items-center gap-1 mt-2">
-                        <img src={assets.star_icon} alt="star_icon" className="w-3 " />
-                        <img src={assets.star_icon} alt="star_icon" className="w-3 " />
-                        <img src={assets.star_icon} alt="star_icon" className="w-3 " />
-                        <img src={assets.star_icon} alt="star_icon" className="w-3 " />
-                        <img src={assets.star_dull_icon} alt="star_icon" className="w-3" />
+                        <img src={assets.star_icon} alt="star_icon" className="w-3 cursor-pointer" />
+                        <img src={assets.star_icon} alt="star_icon" className="w-3 cursor-pointer" />
+                        <img src={assets.star_icon} alt="star_icon" className="w-3 cursor-pointer" />
+                        <img src={assets.star_icon} alt="star_icon" className="w-3 cursor-pointer" />
+                        <img src={assets.star_dull_icon} alt="star_icon" className="w-3 cursor-pointer" />
                         <p className='pl-2'>(73)</p>
                     </div>
                     <p className='mt-5 font-medium text-3xl'>{currency}{productData.price}</p>
@@ -136,7 +164,7 @@ function Product() {
                             {productData.sizes?.map((item, index) => (
                                 <button
                                     onClick={() => setSize(item)}
-                                    className={`border py-2 px-4 bg-gray-100 ${item === size ? 'border-orange-500' : ''}`}
+                                    className={`border py-2 px-4 bg-gray-100 ${item === size ? 'border-orange-500' : ''} cursor-pointer`}
                                     key={index}
                                 >
                                     {item}
@@ -146,7 +174,7 @@ function Product() {
                     </div>
                     <button
                         onClick={() => addToCart(productData._id, size)}
-                        className='bg-black text-white px-8 py-3 text-sm active:bg-gray-700'
+                        className='bg-black text-white px-8 py-3 text-sm active:bg-gray-700 cursor-pointer'
                     >
                         ADD TO CART
                     </button>
@@ -160,8 +188,8 @@ function Product() {
             </div>
             <div className="mt-20">
                 <div className="flex">
-                    <b className='border px-5 py-3 text-sm'>Description</b>
-                    <p className='border px-5 py-3 text-sm'>Reviews (73)</p>
+                    <b className='border px-5 py-3 text-sm cursor-pointer'>Description</b>
+                    <p className='border px-5 py-3 text-sm cursor-pointer'>Reviews (73)</p>
                 </div>
                 <div className="flex flex-col gap-4 border px-6 py-6 text-sm text-gray-500">
                     <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quae pariatur, obcaecati harum earum similique at consequuntur eligendi tempore mollitia deserunt impedit tempora dolore quasi tenetur magni reprehenderit magnam temporibus dolorum asperiores laboriosam ratione eius?</p>
@@ -170,7 +198,7 @@ function Product() {
             </div>
             <ReletedProduct category={productData.category} subCategory={productData.subCategory} />
 
-            {open && (
+            {openUpdateModal && (
                 <div className="fixed inset-0 z-10 flex items-center justify-center bg-gray-500 bg-opacity-75 p-4">
                     <div className="relative w-full max-w-2xl bg-white rounded-lg shadow-xl p-6 md:p-8 max-h-[90vh] overflow-auto">
                         <div className="text-center text-2xl font-semibold mb-6">
@@ -299,14 +327,14 @@ function Product() {
                             <div className="flex justify-end gap-3 mt-6">
                                 <button
                                     type="button"
-                                    onClick={() => setOpen(false)}
-                                    className="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400"
+                                    onClick={() => setOpenUpdateModal(false)}
+                                    className="px-4 py-2 bg-gray-300 text-gray-700 hover:bg-gray-400"
                                 >
                                     Cancel
                                 </button>
                                 <button
                                     type="submit"
-                                    className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700"
+                                    className="px-4 py-2 bg-green-600 text-white hover:bg-green-700"
                                 >
                                     Save Changes
                                 </button>
@@ -316,9 +344,40 @@ function Product() {
                 </div>
 
             )}
+
+            {openDeleteModal && (
+                <div className="fixed inset-0 z-10 flex items-center justify-center bg-gray-500 bg-opacity-75 p-4">
+                    <div className="relative w-full max-w-2xl bg-white rounded-lg shadow-xl p-6 md:p-8 max-h-[90vh] overflow-auto">
+                        <div className="text-center text-2xl font-semibold mb-6">
+                            <Title text1="Delete" text2="PRODUCT" />
+                        </div>
+                        <div>
+                            Are you sure you want to delete this product?
+                        </div>
+
+                        <div className="flex justify-end gap-3 mt-6">
+                            <button
+                                type="button"
+                                onClick={() => setOpenDeleteModal(false)}
+                                className="px-4 py-2 bg-gray-300 text-gray-700 hover:bg-gray-400"
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                type="button"
+                                onClick={handleDeleteProduct}
+                                className="px-4 py-2 bg-red-600 text-white hover:bg-red-700"
+                            >
+                                Yes
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            )}
         </div>
     ) : (
-        <div className='text-center mt-20'>
+        <div className="text-center py-10">
             <p>Product not found</p>
         </div>
     );

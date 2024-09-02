@@ -62,7 +62,7 @@ function AddProduct() {
                                 name="name"
                                 value={productInfo.name}
                                 onChange={handleChange}
-                                className="mt-2 border border-gray-300 rounded-md py-2 px-4 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                className="mt-2 border border-gray-300 rounded-md py-2 px-4 w-full focus:outline-none focus:ring-2 focus:ring-gray-500"
                                 type="text"
                             />
                         </div>
@@ -73,7 +73,7 @@ function AddProduct() {
                                 name="price"
                                 value={productInfo.price}
                                 onChange={handleChange}
-                                className="mt-2 border border-gray-300 rounded-md py-2 px-4 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                className="mt-2 border border-gray-300 rounded-md py-2 px-4 w-full focus:outline-none focus:ring-2 focus:ring-gray-500"
                                 type="number"
                             />
                         </div>
@@ -88,7 +88,7 @@ function AddProduct() {
                                 name="category"
                                 value={productInfo.category}
                                 onChange={handleChange}
-                                className="mt-2 border border-gray-300 rounded-md py-2 px-4 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                className="mt-2 border border-gray-300 rounded-md py-2 px-4 w-full focus:outline-none focus:ring-2 focus:ring-gray-500"
                                 type="text"
                             />
                         </div>
@@ -99,7 +99,7 @@ function AddProduct() {
                                 name="subCategory"
                                 value={productInfo.subCategory}
                                 onChange={handleChange}
-                                className="mt-2 border border-gray-300 rounded-md py-2 px-4 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                className="mt-2 border border-gray-300 rounded-md py-2 px-4 w-full focus:outline-none focus:ring-2 focus:ring-gray-500"
                                 type="text"
                             />
                         </div>
@@ -113,7 +113,7 @@ function AddProduct() {
                             name="description"
                             value={productInfo.description}
                             onChange={handleChange}
-                            className="mt-2 border border-gray-300 rounded-md py-2 px-4 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="mt-2 border border-gray-300 rounded-md py-2 px-4 w-full focus:outline-none focus:ring-2 focus:ring-gray-500"
                             rows="4"
                         />
                     </div>
@@ -126,7 +126,7 @@ function AddProduct() {
                                 <label key={index} className="flex items-center space-x-2">
                                     <input
                                         type="checkbox"
-                                        className="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                                        className="form-checkbox h-5 w-5 text-green-600 focus:ring-green-600 accent-green-600"
                                         value={size}
                                         onChange={() => handleSizeChange(size)}
                                         checked={productInfo.sizes.includes(size)}
@@ -144,7 +144,7 @@ function AddProduct() {
                             id="images"
                             name="images"
                             onChange={handleImageUpload}
-                            className="mt-2 border border-gray-300 rounded-md py-2 px-4 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="mt-2 border border-gray-300 rounded-md py-2 px-4 w-full focus:outline-none focus:ring-2 focus:ring-gray-500"
                             type="file"
                             accept="image/*"
                             multiple
@@ -174,7 +174,7 @@ function AddProduct() {
                             id="bestseller"
                             name="bestseller"
                             type="checkbox"
-                            className="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                            className="form-checkbox h-5 w-5 text-green-600 focus:ring-green-600 accent-green-600"
                             onChange={handleChange}
                             checked={productInfo.bestseller}
                         />
@@ -183,7 +183,7 @@ function AddProduct() {
 
                     {/* Submit Button */}
                     <div className="text-center mt-8">
-                        <button type="submit" className="bg-blue-600 text-white px-16 py-3 rounded-md hover:bg-blue-700 transition">
+                        <button type="submit" className="px-4 py-2 bg-green-600 text-white hover:bg-green-700">
                             Publish Product
                         </button>
                     </div>
