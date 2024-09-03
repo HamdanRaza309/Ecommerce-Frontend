@@ -134,16 +134,16 @@ function Product() {
                     <div className="flex flex-col overflow-x-auto sm:overflow-y-scroll justify-between sm:justify-normal sm:w-[18.7%] w-full">
                         {productData.images?.map((item, index) => (
                             <img
-                                src={item}
+                                src={item?.trim() ? item : 'https://via.placeholder.com/500?text=No+Image'}
                                 key={index}
                                 className='w-[24%] sm:w-full sm:mb-3 flex-shrink-0 cursor-pointer'
                                 alt={`Product Image ${index + 1}`}
-                                onClick={() => setImage(item)}
+                                onClick={() => setImage(item?.trim() ? item : 'https://via.placeholder.com/500?text=No+Image')}
                             />
                         ))}
                     </div>
                     <div className="w-full sm:w-[80%]">
-                        <img src={image} alt="Selected Product" className='w-full h-auto' />
+                        <img src={image?.trim() ? image : 'https://via.placeholder.com/500?text=No+Image'} alt="Selected Product" className='w-full h-auto' />
                     </div>
                 </div>
                 <div className="flex-1">

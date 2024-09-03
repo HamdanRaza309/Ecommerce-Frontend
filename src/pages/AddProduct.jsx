@@ -44,6 +44,16 @@ function AddProduct() {
     const handleSubmit = (e) => {
         e.preventDefault();
         addProduct(productInfo);
+        setProductInfo({
+            name: '',
+            price: '',
+            description: '',
+            sizes: [],
+            category: '',
+            subCategory: '',
+            images: [],
+            bestseller: false,
+        })
     };
 
     return (
