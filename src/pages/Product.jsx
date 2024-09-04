@@ -4,6 +4,7 @@ import { ShopContext } from '../context/ShopContext';
 import { assets } from '../frontend_assets/assets';
 import ReletedProduct from '../components/ReletedProduct';
 import Title from '../components/Title';
+import Review from '../components/Review';
 
 function Product() {
 
@@ -14,6 +15,8 @@ function Product() {
     const [size, setSize] = useState('');
     const [openUpdateModal, setOpenUpdateModal] = useState(false);
     const [openDeleteModal, setOpenDeleteModal] = useState(false);
+    const [ratings, setRatings] = useState(0);
+    const [numOfReviews, setNumOfReviews] = useState(0);
     const [productInfo, setProductInfo] = useState({
         name: '',
         price: '',
@@ -37,6 +40,8 @@ function Product() {
             if (foundProduct) {
                 setProductData(foundProduct);
                 setImage(foundProduct.images?.[0] || '');
+                setRatings(foundProduct.ratings);
+                setNumOfReviews(foundProduct.numOfReviews)
             } else {
                 console.error('Product not found');
                 setProductData(null);
@@ -105,6 +110,7 @@ function Product() {
         setOpenUpdateModal(false);
     };
 
+
     return productData ? (
         <div className='border-t-2 pt-10 transition-opacity ease-in-out duration-500 opacity-100'>
             {userRole === 'admin' && (
@@ -148,14 +154,7 @@ function Product() {
                 </div>
                 <div className="flex-1">
                     <h1 className='font-medium text-2xl mt-2'>{productData.name}</h1>
-                    <div className="flex items-center gap-1 mt-2">
-                        <img src={assets.star_icon} alt="star_icon" className="w-3 cursor-pointer" />
-                        <img src={assets.star_icon} alt="star_icon" className="w-3 cursor-pointer" />
-                        <img src={assets.star_icon} alt="star_icon" className="w-3 cursor-pointer" />
-                        <img src={assets.star_icon} alt="star_icon" className="w-3 cursor-pointer" />
-                        <img src={assets.star_dull_icon} alt="star_icon" className="w-3 cursor-pointer" />
-                        <p className='pl-2'>(73)</p>
-                    </div>
+                    <Review ratings={ratings} numOfReviews={numOfReviews} />
                     <p className='mt-5 font-medium text-3xl'>{currency}{productData.price}</p>
                     <p className='mt-5 text-gray-500 md:w-4/5'>{productData.description}</p>
                     <div className="flex flex-col gap-4 my-8">

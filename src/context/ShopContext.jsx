@@ -178,6 +178,7 @@ const ShopContextProvider = ({ children }) => {
         return JSON.parse(jsonPayload);
     };
 
+
     const value = {
         products,
         currency,
