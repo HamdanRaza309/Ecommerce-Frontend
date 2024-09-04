@@ -41,12 +41,12 @@ router.post('/createuser', [
         });
 
         const data = {
-            user: { id: user.id, role: user.role }
+            user: { id: user.id, role: user.role, name: user.name }
         };
         const authToken = jwt.sign(data, JWT_SECRET);
 
         success = true;
-        res.json({ success, authToken, role: user.role });
+        res.json({ success, authToken, role: user.role, name: user.name });
     } catch (error) {
         console.error("Error creating user:", error.message);
         res.status(500).json({ success, error: 'Internal Server Error. Please try again later.' });
@@ -78,12 +78,12 @@ router.post('/login', [
         }
 
         const data = {
-            user: { id: user.id, role: user.role }
+            user: { id: user.id, role: user.role, name: user.name }
         };
         const authToken = jwt.sign(data, JWT_SECRET);
 
         success = true;
-        res.json({ success, authToken, role: user.role });
+        res.json({ success, authToken, role: user.role, name: user.name });
     } catch (error) {
         console.error("Error logging in:", error.message);
         res.status(500).json({ success, error: 'Internal Server Error. Please try again later.' });

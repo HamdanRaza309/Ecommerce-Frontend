@@ -15,6 +15,7 @@ app.use(express.json());
 
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/product', require('./routes/productRoutes'));
+app.use('/api/ratings', require('./routes/ratingsRoutes'));
 
 app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);

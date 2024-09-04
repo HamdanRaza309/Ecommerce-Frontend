@@ -20,7 +20,6 @@ function Collection() {
         const fetchedProducts = async () => {
             try {
                 const productsData = await readProducts();
-                // console.log(productsData);
                 setProducts(productsData);
                 setFilterProducts(productsData || []);
             } catch (error) {
@@ -48,7 +47,7 @@ function Collection() {
     };
 
     const applyFilter = () => {
-        let productCopy = [...products]; // Use spread operator to copy array
+        let productCopy = [...products];
 
         if (showSearch && search) {
             productCopy = productCopy.filter(item => item.name.toLowerCase().includes(search.toLowerCase()));
@@ -70,7 +69,7 @@ function Collection() {
     }, [category, subCategory, search, showSearch]);
 
     const sortProducts = () => {
-        let filterProductsCopy = [...filterProducts]; // Use spread operator to copy array
+        let filterProductsCopy = [...filterProducts];
 
         switch (sortType) {
             case 'low-high':
@@ -81,7 +80,7 @@ function Collection() {
                 break;
             default:
                 applyFilter();
-                return; // Exit function early if default case
+                return;
         }
 
         setFilterProducts(filterProductsCopy);
@@ -91,17 +90,17 @@ function Collection() {
         sortProducts();
     }, [sortType]);
 
-
     const handleSelectPage = (selectedPage) => {
         if (selectedPage >= 1 && selectedPage <= Math.ceil(filterProducts.length / 30) && selectedPage !== page) {
             setPage(selectedPage);
         }
     };
+
     return (
         <div className="flex flex-col sm:flex-row gap-1 sm:gap-10 pt-10 border-t">
             {/* Left Side */}
-            <div className="min-w-60">
-                <p onClick={() => setShowFilter(!showFilter)} className='cursor-pointer gap-2 items-center my-2 text-xl'>
+            <div className="sm:w-60 w-full sm:min-w-[15rem]">
+                <p onClick={() => setShowFilter(!showFilter)} className='cursor-pointer flex gap-2 items-center my-2 text-xl'>
                     FILTERS
                     <img className={`h-3 sm:hidden ${showFilter ? 'rotate-90' : ''}`} src={assets.dropdown_icon} alt="dropdown_icon" />
                 </p>
@@ -139,7 +138,7 @@ function Collection() {
 
             {/* Right Side */}
             <div className="flex-1">
-                <div className="flex flex-col lg:flex-row  justify-between text-base sm:text-2xl mb-4">
+                <div className="flex flex-col lg:flex-row justify-between text-base sm:text-2xl mb-4">
                     <Title text1={'ALL'} text2={'COLLECTIONS'} />
 
                     <select onChange={(e) => setSortType(e.target.value)} className='border border-gray-300 text-sm px-2'>
@@ -159,7 +158,9 @@ function Collection() {
                             price={item.price}
                         />
                     ))}
-                    {filterProducts.length > 0 && (
+                </div>
+                {filterProducts.length > 0 && (
+                    <div className='flex flex-col items-center'>
                         <div className="flex justify-center items-center mt-6 space-x-2">
                             <span
                                 onClick={() => handleSelectPage(page - 1)}
@@ -172,7 +173,7 @@ function Collection() {
                                     <span
                                         onClick={() => handleSelectPage(i + 1)}
                                         key={i}
-                                        className={`cursor-pointer text-center w-8 sm:w-10 px-2 sm:px-3 py-1 text-sm sm:text-lg  ${page === i + 1 ? 'bg-gray-600 text-white' : 'bg-gray-300 text-gray-700 hover:bg-gray-400 hover:text-white'} transition duration-200`}
+                                        className={`cursor-pointer text-center w-8 sm:w-10 px-2 sm:px-3 py-1 text-sm sm:text-lg ${page === i + 1 ? 'bg-gray-600 text-white' : 'bg-gray-300 text-gray-700 hover:bg-gray-400 hover:text-white'} transition duration-200`}
                                     >
                                         {i + 1}
                                     </span>
@@ -185,9 +186,9 @@ function Collection() {
                                 <FontAwesomeIcon icon={faChevronRight} />
                             </span>
                         </div>
-                    )}
-
-                </div>
+                        <h1 className="text-sm">Products from {Math.min(page * 30 - 29, filterProducts.length)} to {Math.min(page * 30, filterProducts.length)}</h1>
+                    </div>
+                )}
             </div>
         </div>
     );
