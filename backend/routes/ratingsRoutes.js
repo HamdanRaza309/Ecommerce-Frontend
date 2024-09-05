@@ -66,7 +66,7 @@ router.post('/products/:id/addreview', fetchuser, async (req, res) => {
         product.ratings = product.reviews.length > 0 ? totalRatings / product.reviews.length : 0;
 
         await product.save();
-        res.status(200).json({ success: true, message: "Review submitted successfully" });
+        res.status(200).json({ success: true, message: "Review submitted successfully", review: review });
     } catch (error) {
         console.error("Error occurred:", error);
         if (error.name === 'CastError') {
@@ -122,6 +122,7 @@ router.put('/products/:id/updatereview/:reviewId', fetchuser, async (req, res) =
         }
     }
 });
+
 
 router.delete('/products/:id/deletereview/:reviewId', fetchuser, async (req, res) => {
     try {

@@ -5,6 +5,7 @@ import { assets } from '../frontend_assets/assets';
 import ReletedProduct from '../components/ReletedProduct';
 import Title from '../components/Title';
 import Review from '../components/Review';
+import ProductReviews from '../components/ProductReviews';
 
 function Product() {
 
@@ -185,10 +186,12 @@ function Product() {
                     </div>
                 </div>
             </div>
+            <div>
+                <ProductReviews productId={id} />
+            </div>
             <div className="mt-20">
                 <div className="flex">
                     <b className='border px-5 py-3 text-sm cursor-pointer'>Description</b>
-                    <p className='border px-5 py-3 text-sm cursor-pointer'>Reviews (73)</p>
                 </div>
                 <div className="flex flex-col gap-4 border px-6 py-6 text-sm text-gray-500">
                     <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quae pariatur, obcaecati harum earum similique at consequuntur eligendi tempore mollitia deserunt impedit tempora dolore quasi tenetur magni reprehenderit magnam temporibus dolorum asperiores laboriosam ratione eius?</p>

@@ -17,7 +17,21 @@ const ReviewSchema = new Schema({
         type: String,
         required: true
 
-    }
+    },
+    date: {
+        type: String,
+        default: function () {
+            const currentDate = new Date();
+            const minutes = currentDate.getMinutes();
+            const hours = currentDate.getHours();
+            const day = currentDate.getDate();
+            const month = currentDate.getMonth() + 1;
+            const year = currentDate.getFullYear();
+
+            return `${hours}:${minutes > 10 ? '' : 0}${minutes} ${day}/${month}/${year}`
+
+        }
+    },
 });
 
 const ProductSchema = new Schema({
@@ -68,9 +82,18 @@ const ProductSchema = new Schema({
 
     },
     date: {
-        type: Date,
-        default: Date.now
+        type: String,
+        default: function () {
+            const currentDate = new Date();
+            const minutes = currentDate.getMinutes();
+            const hours = currentDate.getHours();
+            const day = currentDate.getDate();
+            const month = currentDate.getMonth() + 1;
+            const year = currentDate.getFullYear();
 
+            return `${hours}:${minutes > 10 ? '' : 0}${minutes} ${day}/${month}/${year}`
+
+        }
     },
     bestseller: {
         type: Boolean,
