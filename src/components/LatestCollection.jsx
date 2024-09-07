@@ -13,7 +13,7 @@ function LatestCollection() {
             try {
                 const productsData = await readProducts();
                 if (productsData && productsData.length > 0) {
-                    setLatestProducts(productsData.slice(10, 20))
+                    setLatestProducts(productsData.slice(productsData.length - 10, productsData.length))
 
                 }
             } catch (error) {
@@ -38,7 +38,7 @@ function LatestCollection() {
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 gap-y-6">
                 {
                     latestProducts.map((item, index) => (
-                        <ProductItem key={index} id={item._id} image={item.image} name={item.name} price={item.price} />
+                        <ProductItem key={index} id={item._id} images={item.images} name={item.name} price={item.price} />
                     ))
                 }
             </div>

@@ -3,7 +3,7 @@ import { ShopContext } from '../context/ShopContext'
 import Title from './Title';
 import ProductItem from './ProductItem';
 
-function ReletedProduct({ category, subCategory }) {
+function RelatedProduct({ category, subCategory }) {
 
     const { products } = useContext(ShopContext);
     const [releted, setReleted] = useState([]);
@@ -41,7 +41,7 @@ function ReletedProduct({ category, subCategory }) {
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 gap-y-6">
                 {
                     releted.map((item, index) => (
-                        <ProductItem key={index} id={item._id} image={item.image} name={item.name} price={item.price} />
+                        <ProductItem key={index} id={item._id} images={item.images} name={item.name} price={item.price} />
                     ))
                 }
             </div>
@@ -49,4 +49,4 @@ function ReletedProduct({ category, subCategory }) {
     )
 }
 
-export default ReletedProduct
+export default RelatedProduct

@@ -11,7 +11,10 @@ connectToMongoDb();
 
 // middlewares
 app.use(cors());
-app.use(express.json());
+
+// Set request payload size limits
+app.use(express.json({ limit: '100mb' })); // Apply the payload size limit here
+app.use(express.urlencoded({ limit: '100mb', extended: true }));
 
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/product', require('./routes/productRoutes'));

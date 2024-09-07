@@ -2,10 +2,11 @@ import React, { useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { ShopContext } from '../context/ShopContext';
 import { assets } from '../frontend_assets/assets';
-import ReletedProduct from '../components/ReletedProduct';
+import RelatedProduct from '../components/RelatedProduct';
 import Title from '../components/Title';
 import Review from '../components/Review';
 import ProductReviews from '../components/ProductReviews';
+import imageCompression from 'browser-image-compression';
 
 function Product() {
 
@@ -96,14 +97,44 @@ function Product() {
         }));
     };
 
-    const handleImageUpload = (e) => {
-        const files = Array.from(e.target.files);
-        const newImages = files.map(file => URL.createObjectURL(file));
-        setProductInfo((prevState) => ({
-            ...prevState,
-            images: [...prevState.images, ...newImages].slice(0, 4),
-        }));
+    const handleImageUpload = async (e) => {
+        const files = Array.from(e.target.files); // Get all files
+
+        try {
+            // Compress all images and convert them to Base64
+            const compressedImages = await Promise.all(
+                files.map(async (file) => {
+                    const options = {
+                        maxSizeMB: 1, // Max size in MB
+                        maxWidthOrHeight: 1024, // Max dimensions
+                        useWebWorker: true,
+                    };
+                    const compressedFile = await imageCompression(file, options);
+                    const base64 = await convertToBase64(compressedFile);
+                    return base64;
+                })
+            );
+
+            // Update the state with the new images, limited to 4
+            setProductInfo((prevState) => ({
+                ...prevState,
+                images: [...prevState.images, ...compressedImages].slice(0, 4),
+            }));
+        } catch (error) {
+            console.error("Error compressing the images: ", error);
+        }
     };
+
+    const convertToBase64 = (file) => {
+        return new Promise((resolve, reject) => {
+            const fileReader = new FileReader();
+            fileReader.readAsDataURL(file);
+
+            fileReader.onload = () => resolve(fileReader.result);
+            fileReader.onerror = (error) => reject(error);
+        });
+    };
+
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -198,7 +229,7 @@ function Product() {
                     <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda quae labore corrupti, eos, ullam vero ipsam corporis, beatae provident ex atque sint quas laborum.</p>
                 </div>
             </div>
-            <ReletedProduct category={productData.category} subCategory={productData.subCategory} />
+            <RelatedProduct category={productData.category} subCategory={productData.subCategory} />
 
             {openUpdateModal && (
                 <div className="fixed inset-0 z-10 flex items-center justify-center bg-gray-500 bg-opacity-75 p-4">
@@ -310,21 +341,31 @@ function Product() {
 
                             {/* Image Upload */}
                             <div>
-                                <label htmlFor="images" className="block text-sm font-medium text-gray-700">Upload Images (Max 4)</label>
+                                <label htmlFor="images" className="block text-sm font-medium text-gray-700">
+                                    Upload Images (Max 4)
+                                </label>
+                                <label htmlFor="images" className="block text-sm font-medium text-gray-700">Upload Images</label>
                                 <input
                                     id="images"
                                     name="images"
-                                    type="file"
                                     onChange={handleImageUpload}
+                                    className="mt-2 border border-gray-300 rounded-md py-2 px-4 w-full focus:outline-none focus:ring-2 focus:ring-gray-500"
+                                    type="file"
+                                    accept="image/*"
                                     multiple
-                                    className="mt-1 block w-full text-gray-900"
                                 />
                                 <div className="mt-4 flex gap-2 flex-wrap">
                                     {productInfo.images.map((image, index) => (
-                                        <img key={index} src={image} alt={`Uploaded ${index + 1}`} className="w-24 h-24 object-cover rounded-md border border-gray-300" />
+                                        <img
+                                            key={index}
+                                            src={image}
+                                            alt={`Uploaded ${index + 1}`}
+                                            className="w-24 h-24 object-cover rounded-md border border-gray-300"
+                                        />
                                     ))}
                                 </div>
                             </div>
+
 
                             <div className="flex justify-end gap-3 mt-6">
                                 <button

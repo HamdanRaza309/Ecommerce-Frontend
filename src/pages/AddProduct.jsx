@@ -1,6 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { ShopContext } from '../context/ShopContext';
 import Title from '../components/Title';
+import imageCompression from 'browser-image-compression';
 
 function AddProduct() {
     const { addProduct } = useContext(ShopContext);
@@ -32,17 +33,40 @@ function AddProduct() {
         }));
     };
 
-    const handleImageUpload = (e) => {
-        const files = Array.from(e.target.files);
-        const newImages = files.map(file => URL.createObjectURL(file));
-        setProductInfo((prevState) => ({
-            ...prevState,
-            images: [...prevState.images, ...newImages].slice(0, 4),
-        }));
+    const handleImageUpload = async (e) => {
+        const file = e.target.files[0];
+        try {
+            const options = {
+                maxSizeMB: 1, // Set the max size in MB
+                maxWidthOrHeight: 1024, // Max dimensions
+                useWebWorker: true,
+            };
+            const compressedFile = await imageCompression(file, options);
+            const base64 = await convertToBase64(compressedFile);
+            setProductInfo((prevState) => ({
+                ...prevState,
+                images: [...prevState.images, base64],
+            }));
+        } catch (error) {
+            console.error("Error compressing the image: ", error);
+        }
     };
+
+    function convertToBase64(file) {
+        return new Promise((resolve, reject) => {
+            const fileReader = new FileReader();
+            fileReader.readAsDataURL(file);
+            fileReader.onload = () => resolve(fileReader.result);
+            fileReader.onerror = (error) => reject(error);
+        });
+    }
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        if (productInfo.images.length === 0) {
+            alert('Please upload at least one image.');
+            return;
+        }
         addProduct(productInfo);
         setProductInfo({
             name: '',
@@ -53,13 +77,13 @@ function AddProduct() {
             subCategory: '',
             images: [],
             bestseller: false,
-        })
+        });
     };
 
     return (
         <div className="min-h-screen">
             <div className="max-w-4xl mx-auto bg-white shadow-md rounded-lg p-6">
-                <div className='text-3xl'>
+                <div className="text-3xl">
                     <Title text1="ADD" text2="A NEW PRODUCT" />
                 </div>
                 <form onSubmit={handleSubmit} className="mt-6 space-y-6">

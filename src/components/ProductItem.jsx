@@ -2,7 +2,7 @@ import React, { useContext } from 'react'
 import { ShopContext } from '../context/ShopContext'
 import { Link } from 'react-router-dom'
 
-function ProductItem({ id, image, name, price }) {
+function ProductItem({ id, images, name, price }) {
 
     const { currency } = useContext(ShopContext);
 
@@ -10,7 +10,7 @@ function ProductItem({ id, image, name, price }) {
         <Link to={`/product/${id}`} className="text-gray-700 cursor-pointer">
             <div className="overflow-hidden">
                 <img
-                    src={image && image.length > 0 ? image[0] : 'https://via.placeholder.com/500?text=No+Image'}
+                    src={images && images.length > 0 ? images[0] : 'https://via.placeholder.com/500?text=No+Image'}
                     alt="product Img"
                     className='hover:scale-110 transition ease-in-out'
                 />
