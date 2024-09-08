@@ -57,7 +57,7 @@ function Cart() {
                         <div key={index} className='py-4 border-t border-b text-gray-700 grid grid-cols-[4fr_0.54fr_0.5fr] sm:grid-cols-[4fr_2fr_0.5fr] items-center gap-'>
                             <div className='flex items-start gap-6'>
                                 <img
-                                    src={productData.image && productData.image.length > 0 ? productData.image[0] : 'https://via.placeholder.com/150?text=No+Image'}
+                                    src={productData.images && productData.images.length > 0 ? productData.images[0] : 'https://via.placeholder.com/150?text=No+Images'}
                                     alt='product img'
                                     className='w-16 sm:w-20'
                                 />
