@@ -1,26 +1,27 @@
-import React from 'react'
-import { assets } from '../frontend_assets/assets'
+import React from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faExchangeAlt, faCheckCircle, faHeadset } from '@fortawesome/free-solid-svg-icons';
 
 function OurPolicy() {
     return (
-        <div className="flex flex-col sm:flex-row justify-around gap-12 sm:gap-2 text-center py-20 text-xs sm:text-sm md:text-base text-gray-700">
-            <div>
-                <img src={assets.exchange_icon} alt="exchange_icon" className='w-12 m-auto mb-5' />
-                <p className='font-semibold'>Easy Exchange Policy</p>
-                <p className='text-gray-400'>We offer hassle free exchange policy</p>
+        <div className="flex flex-col sm:flex-row justify-around gap-12 sm:gap-6 text-center py-20 px-4 sm:px-8 text-gray-700 shadow-lg mt-5 mb-10">
+            <div className="flex flex-col items-center">
+                <FontAwesomeIcon icon={faExchangeAlt} className='w-12 h-12 text-red-600 mb-4' />
+                <p className='text-lg font-semibold mb-2'>Easy Exchange</p>
+                <p className='text-sm text-gray-600'>We offer hassle-free exchange policy</p>
             </div>
-            <div>
-                <img src={assets.quality_icon} alt="quality_icon" className='w-12 m-auto mb-5' />
-                <p className='font-semibold'>7 Days Return Policy</p>
-                <p className='text-gray-400'>We provide free return policy</p>
+            <div className="flex flex-col items-center">
+                <FontAwesomeIcon icon={faCheckCircle} className='w-12 h-12 text-red-600 mb-4' />
+                <p className='text-lg font-semibold mb-2'>7 Days Return</p>
+                <p className='text-sm text-gray-600'>We provide free return policy</p>
             </div>
-            <div>
-                <img src={assets.support_img} alt="support_img" className='w-12 m-auto mb-5' />
-                <p className='font-semibold'>Best Customer Support</p>
-                <p className='text-gray-400'>We provide 24/7 customer support</p>
+            <div className="flex flex-col items-center">
+                <FontAwesomeIcon icon={faHeadset} className='w-12 h-12 text-red-600 mb-4' />
+                <p className='text-lg font-semibold mb-2'>Customer Support</p>
+                <p className='text-sm text-gray-600'>We provide 24/7 customer support</p>
             </div>
         </div>
-    )
+    );
 }
 
-export default OurPolicy
+export default OurPolicy;

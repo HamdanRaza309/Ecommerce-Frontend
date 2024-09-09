@@ -45,7 +45,7 @@ const ShopContextProvider = ({ children }) => {
 
             return cartItemsWithProducts;
         } catch (error) {
-            toast.error('Error fetching cart items. Please try again later.');
+            // toast.error('Error fetching cart items. Please try again later.');
             return [];
         }
     };
@@ -140,7 +140,7 @@ const ShopContextProvider = ({ children }) => {
     const getCartCount = () => cartItems.reduce((totalCount, item) => totalCount + item.quantity, 0);
 
     // Function to get total cart amount
-    console.log(cartItems);
+    // console.log(cartItems);
 
     const getCartAmount = () => cartItems.reduce((totalAmount, item) =>
         totalAmount + item.product.price * item.quantity, 0);
