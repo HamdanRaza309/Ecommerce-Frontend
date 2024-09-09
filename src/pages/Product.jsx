@@ -204,7 +204,8 @@ function Product() {
                         </div>
                     </div>
                     <button
-                        onClick={() => addToCart(productData._id, size)}
+                        onClick={() => addToCart(productData, size)}
+                        // onClick={() => addToCart(productData)}
                         className='bg-black text-white px-8 py-3 text-sm active:bg-gray-700 cursor-pointer'
                     >
                         ADD TO CART

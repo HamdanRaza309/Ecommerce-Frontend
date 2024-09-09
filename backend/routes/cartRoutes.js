@@ -9,15 +9,12 @@ router.post('/add-to-cart', fetchuser, async (req, res) => {
     const userId = req.user.id;
 
     try {
-        // Check if the product already exists in the user's cart
         let cartItem = await Cart.findOne({ productId, userId, productSize });
 
         if (cartItem) {
-            // Update the quantity and total price
             cartItem.quantity += quantity;
             cartItem.price = (cartItem.price / (cartItem.quantity - quantity)) * cartItem.quantity;
         } else {
-            // Create a new cart item
             cartItem = new Cart({
                 userId,
                 productId,
@@ -36,12 +33,12 @@ router.post('/add-to-cart', fetchuser, async (req, res) => {
     }
 });
 
-// Retrieve all cart items for the user
+// Retrieve all cart items
 router.get('/cart-items', fetchuser, async (req, res) => {
     const userId = req.user.id;
 
     try {
-        const cartItems = await Cart.find({ userId });
+        const cartItems = await Cart.find({ userId }).populate('productId');
         res.status(200).json(cartItems);
     } catch (error) {
         console.error('Failed to retrieve cart items:', error);
@@ -50,22 +47,25 @@ router.get('/cart-items', fetchuser, async (req, res) => {
 });
 
 // Update a cart item
-router.put('/cart-item/update/:id', fetchuser, async (req, res) => {
-    const { id } = req.params;
-    const { quantity } = req.body;
+router.put('/cart-item/update', fetchuser, async (req, res) => {
+    const { cartItemId, quantity } = req.body;
     const userId = req.user.id;
 
     try {
-        const cartItem = await Cart.findOne({ userId, _id: id });
+        const cartItem = await Cart.findOne({ userId, _id: cartItemId });
 
         if (cartItem) {
-            // Assuming the price remains the same per unit, recalculate the total price
-            const unitPrice = cartItem.price / cartItem.quantity;
-            cartItem.quantity = quantity;
-            cartItem.price = unitPrice * quantity;
+            if (quantity > 0) {
+                const unitPrice = cartItem.price / cartItem.quantity;
+                cartItem.quantity = quantity;
+                cartItem.price = unitPrice * quantity;
 
-            const updatedItem = await cartItem.save();
-            res.status(200).json({ message: 'Cart item updated successfully', updatedItem });
+                const updatedItem = await cartItem.save();
+                res.status(200).json({ message: 'Cart item updated successfully', updatedItem });
+            } else {
+                await cartItem.remove();
+                res.status(200).json({ message: 'Cart item removed successfully' });
+            }
         } else {
             res.status(404).json({ message: 'Cart item not found' });
         }
