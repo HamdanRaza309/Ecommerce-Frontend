@@ -1,7 +1,7 @@
 import React, { Suspense, lazy } from 'react';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, useLocation } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import SearchBar from './components/SearchBar';
@@ -20,6 +20,11 @@ const PlaceOrder = lazy(() => import('./pages/PlaceOrder'));
 const Orders = lazy(() => import('./pages/Orders'));
 
 const App = () => {
+  const location = useLocation();
+
+  // Determine if the current path is '/login'
+  const isLoginPage = location.pathname === '/login';
+
   return (
     <>
       <ToastContainer />
@@ -41,7 +46,7 @@ const App = () => {
           </Routes>
         </Suspense>
       </div>
-      <Footer />
+      {!isLoginPage && <Footer />}
     </>
   );
 }

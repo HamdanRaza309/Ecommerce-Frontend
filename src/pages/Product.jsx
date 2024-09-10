@@ -152,13 +152,13 @@ function Product() {
                             <>
                                 <button
                                     onClick={handleDelete}
-                                    className="bg-red-600 text-white px-4 py-2 shadow-lg hover:bg-red-700 transition-colors duration-300"
+                                    className="py-3 px-6 text-sm font-semibold tracking-wide text-white bg-red-600 border-2 border-transparent rounded-none shadow-[inset_0_0_0_50px_#dc2626] transition ease-in-out duration-300 hover:text-red-600 hover:bg-transparent hover:border-red-600 hover:shadow-[inset_0_0_0_0_#dc2626]"
                                 >
                                     DELETE
                                 </button>
                                 <button
                                     onClick={handleUpdate}
-                                    className="bg-green-600 text-white px-4 py-2 shadow-lg hover:bg-green-700 transition-colors duration-300"
+                                    className="py-3 px-6 text-sm font-semibold tracking-wide text-white bg-green-600 border-2 border-transparent rounded-none shadow-[inset_0_0_0_50px_#16a34a] transition ease-in-out duration-300 hover:text-green-600 hover:bg-transparent hover:border-green-600 hover:shadow-[inset_0_0_0_0_#16a34a]"
                                 >
                                     UPDATE
                                 </button>
@@ -167,7 +167,7 @@ function Product() {
                     </div>
                 </div>
             )}
-            <div className='flex gap-12 sm:gap-12 flex-col sm:flex-row mt-10'>
+            <div className='flex gap-12 pb-20 sm:gap-12 flex-col sm:flex-row mt-10 border-b'>
                 <div className="flex-1 flex flex-col-reverse sm:flex-row gap-3">
                     <div className="flex flex-col overflow-x-auto sm:overflow-y-scroll justify-between sm:justify-normal sm:w-[18.7%] w-full">
                         {productData.images?.map((item, index) => (
@@ -185,7 +185,7 @@ function Product() {
                     </div>
                 </div>
                 <div className="flex-1">
-                    <h1 className='font-medium text-2xl mt-2'>{productData.name}</h1>
+                    <h1 className='font-medium text-blue-500 text-2xl mt-2'>{productData.name}</h1>
                     <Review ratings={ratings} numOfReviews={numOfReviews} />
                     <p className='mt-5 font-medium text-3xl'>{currency}{productData.price}</p>
                     <p className='mt-5 text-gray-500 md:w-4/5'>{productData.description}</p>
@@ -195,7 +195,7 @@ function Product() {
                             {productData.sizes?.map((item, index) => (
                                 <button
                                     onClick={() => setSize(item)}
-                                    className={`border py-2 px-4 bg-gray-100 ${item === size ? 'border-orange-500' : ''} cursor-pointer`}
+                                    className={`border py-2 px-4 bg-gray-100 ${item === size ? 'border-yellow-400' : ''} cursor-pointer`}
                                     key={index}
                                 >
                                     {item}
@@ -205,8 +205,7 @@ function Product() {
                     </div>
                     <button
                         onClick={() => addToCart(productData, size)}
-                        // onClick={() => addToCart(productData)}
-                        className='bg-black text-white px-8 py-3 text-sm active:bg-gray-700 cursor-pointer'
+                        className='btnForWhiteBg'
                     >
                         ADD TO CART
                     </button>
@@ -226,8 +225,8 @@ function Product() {
                     <b className='border px-5 py-3 text-sm cursor-pointer'>Description</b>
                 </div>
                 <div className="flex flex-col gap-4 border px-6 py-6 text-sm text-gray-500">
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quae pariatur, obcaecati harum earum similique at consequuntur eligendi tempore mollitia deserunt impedit tempora dolore quasi tenetur magni reprehenderit magnam temporibus dolorum asperiores laboriosam ratione eius?</p>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda quae labore corrupti, eos, ullam vero ipsam corporis, beatae provident ex atque sint quas laborum.</p>
+                    <p>Elevate your style with our latest fashion collection, featuring high-quality materials and timeless designs. From chic dresses to versatile jackets, each piece combines contemporary trends with classic elegance. Perfect for making a statement or refining your everyday look.</p>
+                    <p>Our collection blends contemporary trends with classic elegance, ensuring that you'll always look and feel your best. Each item is meticulously designed with attention to detail, from flattering cuts to premium fabrics, to create a look that is both sophisticated and effortlessly stylish.</p>
                 </div>
             </div>
             <RelatedProduct category={productData.category} subCategory={productData.subCategory} />
@@ -372,13 +371,13 @@ function Product() {
                                 <button
                                     type="button"
                                     onClick={() => setOpenUpdateModal(false)}
-                                    className="px-4 py-2 bg-gray-300 text-gray-700 hover:bg-gray-400"
+                                    className="py-3 px-6 text-sm font-semibold tracking-wide text-white bg-gray-600 border-2 border-transparent rounded-none shadow-[inset_0_0_0_50px_#4b5563] transition ease-in-out duration-300 hover:text-gray-600 hover:bg-transparent hover:border-gray-600 hover:shadow-[inset_0_0_0_0_#4b5563]"
                                 >
                                     Cancel
                                 </button>
                                 <button
                                     type="submit"
-                                    className="px-4 py-2 bg-green-600 text-white hover:bg-green-700"
+                                    className="py-3 px-6 text-sm font-semibold tracking-wide text-white bg-green-600 border-2 border-transparent rounded-none shadow-[inset_0_0_0_50px_#16a34a] transition ease-in-out duration-300 hover:text-green-600 hover:bg-transparent hover:border-green-600 hover:shadow-[inset_0_0_0_0_#16a34a]"
                                 >
                                     Save Changes
                                 </button>

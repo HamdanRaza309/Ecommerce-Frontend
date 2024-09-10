@@ -56,12 +56,12 @@ function Contact() {
             <div className='my-10 mb-28 gap-10 flex flex-col justify-center md:flex-row'>
                 <img className='w-full md:max-w-[480px] object-cover' src={assets.contact_img} alt="Fashion Closet Store" />
                 <div className='flex flex-col justify-center items-start gap-6 px-4 md:px-0'>
-                    <p className='font-semibold text-xl text-gray-600'>Visit Our Store</p>
+                    <p className='font-semibold text-xl text-blue-500'>Visit Our Store</p>
                     <p className='text-gray-500'>Maini Topi, Swabi <br /> Khyber Pakhtoon Khwa, Pakistan</p>
                     <p className='text-gray-500'>Phone: +10-293-8475 <br /> Email: fashioncloset@gmail.com</p>
-                    <p className='font-semibold text-xl text-gray-600'>Join Our Team</p>
+                    <p className='font-semibold text-xl text-blue-500'>Join Our Team</p>
                     <p className='text-gray-500'>Discover more about our team and available job opportunities at Fashion Closet.</p>
-                    <button className='border border-black my-8 px-8 py-3 text-sm hover:bg-black hover:text-white transition-all duration-500'>
+                    <button className='btnForWhiteBg'>
                         Explore Jobs
                     </button>
                     <div className='flex gap-4 mt-6'>
@@ -112,7 +112,7 @@ function Contact() {
                         ></textarea>
                         <button
                             type="submit"
-                            className="px-8 py-3 text-sm text-white bg-black hover:bg-gray-800 transition-all duration-500 rounded"
+                            className="btnForWhiteBg"
                         >
                             Send Message
                         </button>

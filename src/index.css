@@ -34,18 +34,18 @@ a.active hr{
   font-weight: 600;
   letter-spacing: 1px;
   color: #ffffff;
-  background: #EF233C;
+  background: #FACC15;
   border: 2px solid transparent;
   border-radius: 0;
-  box-shadow: inset 0 0 0 50px #EF233C;
+  box-shadow: inset 0 0 0 50px #FACC15;
   transition: ease-in 0.3s;
 }
 
 .btnForWhiteBg:hover {
-  color: #EF233C;
+  color: #FACC15;
   background: transparent;
-  box-shadow: inset 0 0 0 0 #EF233C;
-  border-color: #EF233C;
+  box-shadow: inset 0 0 0 0 #FACC15;
+  border-color: #FACC15;
 }
 
 .btnForRedBg {
@@ -53,7 +53,7 @@ a.active hr{
   font-size: 14px;
   font-weight: 600;
   letter-spacing: 1px;
-  color: #EF233C;
+  color: #FACC15;
   background: #ffffff ;
   border: 2px solid transparent;
   border-radius: 0;

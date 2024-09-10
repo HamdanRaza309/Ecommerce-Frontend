@@ -7,7 +7,7 @@ function Hero() {
     const navigate = useNavigate();
 
     return (
-        <div className="mt-10 flex flex-col-reverse sm:flex-row shadow-lg border">
+        <div className="mt-10 flex flex-col-reverse sm:flex-row shadow-xl">
             {/* Hero Left Side */}
             <div className="w-full sm:w-1/2 flex items-center justify-center py-10 sm:py-16 lg:py-24 px-6 sm:px-12 lg:px-16">
                 <div className='text-center sm:text-left'>
@@ -31,7 +31,7 @@ function Hero() {
             </div>
 
             {/* Hero Right Side */}
-            <div className='w-full sm:w-1/2'>
+            <div className='w-full sm:w-1/2 bg-yellow-400 flex items-center justify-center'>
                 <img className='w-full h-auto object-cover' src={assets.hero_img} alt="hero_img" />
             </div>
         </div>

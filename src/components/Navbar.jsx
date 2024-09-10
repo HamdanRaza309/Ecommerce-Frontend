@@ -10,10 +10,11 @@ function Navbar() {
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const { decodeToken, setShowSearch, getCartCount } = useContext(ShopContext);
     const navigate = useNavigate();
-    const [bgColor, setBgColor] = useState('bg-red-600');
-    const [textColor, setTextColor] = useState('text-white');
-    const [hoverTextColor, setHoverTextColor] = useState('hover:text-black');
+    const [bgColor, setBgColor] = useState('bg-white');
+    const [textColor, setTextColor] = useState('text-black');
+    const [hoverTextColor, setHoverTextColor] = useState('hover:text-yellow-300');
     const [height, setHeight] = useState('h-28');
+    const [logo, setLogo] = useState(assets.logo1);
 
     const token = localStorage.getItem('token');
     const decoded = decodeToken(token);
@@ -51,15 +52,17 @@ function Navbar() {
     useEffect(() => {
         const handleScrollEvent = () => {
             if (window.scrollY >= 100) {
-                setBgColor('bg-white');
-                setTextColor('text-black');
-                setHoverTextColor('hover:text-red-600');
-                setHeight('h-16');
-            } else {
-                setBgColor('bg-red-600');
+                setBgColor('bg-yellow-400');
                 setTextColor('text-white');
                 setHoverTextColor('hover:text-black');
+                setHeight('h-20');
+                setLogo(assets.logo2);
+            } else {
+                setBgColor('bg-white');
+                setTextColor('text-black');
+                setHoverTextColor('hover:text-yellow-300');
                 setHeight('h-28');
+                setLogo(assets.logo1);
             }
         };
 
@@ -71,9 +74,13 @@ function Navbar() {
     }, []);
 
     return (
-        <div className={`sticky top-0 z-10 ${bgColor} ${textColor} ${height} flex items-center justify-between font-medium px-4 sm:px-[5vw] md:px-[7vw] lg:px-[9vw] transition-all duration-300 ease-in-out`}>
+        <div className={`sticky top-0 z-20 ${bgColor} ${textColor} ${height} flex items-center justify-between border-b font-medium px-4 sm:px-[5vw] md:px-[7vw] lg:px-[9vw] transition-all duration-300 ease-in-out`}>
             <Link to='/'>
-                <img className='w-32 h-20' src={assets.logo} alt="logo" />
+                <img
+                    className='w-40 h-10 max-w-full max-h-16'
+                    src={logo}
+                    alt="logo"
+                />
             </Link>
 
             {/* Desktop Navigation */}
@@ -105,7 +112,7 @@ function Navbar() {
                 <div className="relative">
                     <FontAwesomeIcon
                         icon={faUser}
-                        className={`w-10 h-6 cursor-pointer ${hoverTextColor} transition duration-300 hover:scale-110`}
+                        className={`w-10 h-6 cursor-pointer ${hoverTextColor} transition duration-500 hover:scale-110`}
                         onClick={toggleDropdown}
                     />
                     {dropdownOpen && (
@@ -113,15 +120,15 @@ function Navbar() {
                             <div className="flex flex-col gap-2">
                                 {isLoggedIn ? (
                                     <>
-                                        <p className='cursor-pointer hover:text-black'>My Profile</p>
-                                        <p className='cursor-pointer hover:text-black'>Orders</p>
+                                        <p className='cursor-pointer hover:text-yellow-400'>My Profile</p>
+                                        <p className='cursor-pointer hover:text-yellow-400'>Orders</p>
                                         {userRole === 'admin' && (
-                                            <p onClick={handleAddProduct} className='cursor-pointer hover:text-black'>Add Product</p>
+                                            <p onClick={handleAddProduct} className='cursor-pointer hover:text-yellow-400'>Add Product</p>
                                         )}
-                                        <p onClick={handleLogout} className='cursor-pointer hover:text-black'>Logout</p>
+                                        <p onClick={handleLogout} className='cursor-pointer hover:text-yellow-400'>Logout</p>
                                     </>
                                 ) : (
-                                    <p onClick={handleLogin} className='cursor-pointer hover:text-black'>Login</p>
+                                    <p onClick={handleLogin} className='cursor-pointer hover:text-yellow-400'>Login</p>
                                 )}
                             </div>
                         </div>
@@ -148,10 +155,10 @@ function Navbar() {
                         <img className='h-4 rotate-180' src={assets.dropdown_icon} alt="dropdown_icon" />
                         <p>Back</p>
                     </div>
-                    <NavLink onClick={() => setVisible(false)} to='/' className='py-4 pl-6 text-lg hover:text-red-600 transition duration-300 hover:scale-110'>HOME</NavLink>
-                    <NavLink onClick={() => setVisible(false)} to='/collection' className='py-4 pl-6 text-lg hover:text-red-600 transition duration-300 hover:scale-110'>COLLECTION</NavLink>
-                    <NavLink onClick={() => setVisible(false)} to='/about' className='py-4 pl-6 text-lg hover:text-red-600 transition duration-300 hover:scale-110'>ABOUT</NavLink>
-                    <NavLink onClick={() => setVisible(false)} to='/contact' className='py-4 pl-6 text-lg hover:text-red-600 transition duration-300 hover:scale-110'>CONTACT</NavLink>
+                    <NavLink onClick={() => setVisible(false)} to='/' className='py-4 pl-6 text-lg hover:blue-500 transition duration-300 hover:scale-110'>HOME</NavLink>
+                    <NavLink onClick={() => setVisible(false)} to='/collection' className='py-4 pl-6 text-lg hover:blue-500 transition duration-300 hover:scale-110'>COLLECTION</NavLink>
+                    <NavLink onClick={() => setVisible(false)} to='/about' className='py-4 pl-6 text-lg hover:blue-500 transition duration-300 hover:scale-110'>ABOUT</NavLink>
+                    <NavLink onClick={() => setVisible(false)} to='/contact' className='py-4 pl-6 text-lg hover:blue-500 transition duration-300 hover:scale-110'>CONTACT</NavLink>
                 </div>
             </div>
         </div>

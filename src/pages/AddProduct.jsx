@@ -217,7 +217,7 @@ function AddProduct() {
 
                     {/* Submit Button */}
                     <div className="text-center mt-8">
-                        <button type="submit" className="px-4 py-2 bg-green-600 text-white hover:bg-green-700">
+                        <button type="submit" className="py-3 px-6 text-sm font-semibold tracking-wide text-white bg-green-600 border-2 border-transparent rounded-none shadow-[inset_0_0_0_50px_#16a34a] transition ease-in-out duration-300 hover:text-green-600 hover:bg-transparent hover:border-green-600 hover:shadow-[inset_0_0_0_0_#16a34a]">
                             Publish Product
                         </button>
                     </div>

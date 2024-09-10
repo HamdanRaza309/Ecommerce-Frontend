@@ -43,7 +43,7 @@ const Footer = () => {
                         <Title text1={'FOLLOW '} text2={'US FOR THE LATEST'} />
                     </div>
                     <div className='h-12'>
-                        <h2 className="text-2xl md:text-4xl text-gray-800">{displayedText}</h2>
+                        <h2 className="text-2xl md:text-4xl text-yellow-300">{displayedText}</h2>
                     </div>
                 </div>
                 <div className='flex flex-wrap justify-center space-x-6 md:space-x-28 w-full'>
@@ -73,7 +73,7 @@ const Footer = () => {
                         {/* Left Section */}
                         <div className="w-full lg:w-1/3 mb-8 lg:mb-0 text-center lg:text-left">
                             <div className="flex justify-center lg:justify-start items-center mb-4">
-                                <img className='w-52' src={assets.logo} alt="Fashion Closet Brand Logo" />
+                                <img className='w-52' src={assets.logo2} alt="Fashion Closet Brand Logo" />
                             </div>
                             <p className="text-gray-400 mb-6">
                                 Discover the latest fashion trends and elevate your style with our curated collections. Shop now!

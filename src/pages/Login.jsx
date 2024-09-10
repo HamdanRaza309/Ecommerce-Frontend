@@ -41,7 +41,6 @@ function Login() {
             }
         } catch (error) {
             if (error.response) {
-                // Check for specific backend error messages
                 if (error.response.data.error) {
                     switch (error.response.data.error) {
                         case 'Email already in use. Please use a different email.':
@@ -68,58 +67,55 @@ function Login() {
                 toast.error('An unexpected error occurred. Please try again.');
             }
         }
-
     }
 
-
     return (
-        <div>
-            <form onSubmit={onSubmitHandler} className='flex flex-col items-center w-[90%] sm:max-w-96 m-auto mt-14 gap-4 text-gray-800'>
-                <div className='inline-flex gap-2 mb-2 mt-10 items-center'>
-                    <p className='prata-regular text-3xl'>{currentState}</p>
-                    <p className='w-1 sm:w-1 h-[2px] bg-[#414141]'></p>
-                    <p className='w-8 sm:w-11 h-[2px] bg-[#414141]'></p>
-                </div>
-                {currentState === 'Log In' ? null : (
+        <div className="flex items-center justify-center mt-10">
+            <div className="bg-white p-10 rounded-lg shadow-xl max-w-md w-full transform transition-transform hover:scale-105 duration-300 ease-in-out">
+                <h2 className="text-4xl font-extrabold text-center mb-6 text-blue-700">{currentState}</h2>
+                <form onSubmit={onSubmitHandler} className="flex flex-col gap-6">
+                    {currentState === 'Sign Up' && (
+                        <input
+                            type="text"
+                            name="name"
+                            className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-600 transition duration-300 transform hover:scale-105"
+                            placeholder="Name"
+                            value={formData.name}
+                            onChange={onChangeHandler}
+                            required
+                        />
+                    )}
                     <input
-                        type="text"
-                        name="name"
-                        className='w-full px-3 py-2 border border-gray-800'
-                        placeholder='Name'
-                        value={formData.name}
+                        type="email"
+                        name="email"
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-600 transition duration-300 transform hover:scale-105"
+                        placeholder="Email"
+                        value={formData.email}
                         onChange={onChangeHandler}
                         required
                     />
-                )}
-                <input
-                    type="email"
-                    name="email"
-                    className='w-full px-3 py-2 border border-gray-800'
-                    placeholder='Email'
-                    value={formData.email}
-                    onChange={onChangeHandler}
-                    required
-                />
-                <input
-                    type="password"
-                    name="password"
-                    className='w-full px-3 py-2 border border-gray-800'
-                    placeholder='Password'
-                    value={formData.password}
-                    onChange={onChangeHandler}
-                    required
-                />
-                <div className='w-full flex justify-between text-sm mt-[-8px]'>
-                    <p className='cursor-pointer'>Forget password?</p>
-                    {currentState === 'Log In'
-                        ? <p onClick={() => setCurrentState('Sign Up')} className='cursor-pointer'>Create account</p>
-                        : <p onClick={() => setCurrentState('Log In')} className='cursor-pointer'>Login here</p>
-                    }
-                </div>
-                <button className='bg-black text-white my-8 px-8 py-3 text-sm active:bg-gray-700'>
-                    {currentState === 'Log In' ? 'Sign In' : 'Sign Up'}
-                </button>
-            </form>
+                    <input
+                        type="password"
+                        name="password"
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-600 transition duration-300 transform hover:scale-105"
+                        placeholder="Password"
+                        value={formData.password}
+                        onChange={onChangeHandler}
+                        required
+                    />
+                    <div className="flex justify-between text-sm text-gray-600 mt-4">
+                        <p className="cursor-pointer underline hover:text-blue-800">Forgot password?</p>
+                        {currentState === 'Log In' ? (
+                            <p onClick={() => setCurrentState('Sign Up')} className="cursor-pointer underline hover:text-blue-800">Create an account</p>
+                        ) : (
+                            <p onClick={() => setCurrentState('Log In')} className="cursor-pointer underline hover:text-blue-800">Login here</p>
+                        )}
+                    </div>
+                    <button type="submit" className="btnForWhiteBg">
+                        {currentState === 'Log In' ? 'Sign In' : 'Sign Up'}
+                    </button>
+                </form>
+            </div>
         </div>
     );
 }

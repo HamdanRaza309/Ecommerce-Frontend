@@ -3,6 +3,8 @@ import { ShopContext } from '../context/ShopContext';
 import Title from "../components/Title";
 import { assets } from '../frontend_assets/assets';
 import CartTotal from '../components/CartTotal';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 
 function Cart() {
     const { getCartItems, getUser, currency, deleteCartItem, updateCartItem, navigate } = useContext(ShopContext);
@@ -44,7 +46,7 @@ function Cart() {
                                     className='w-24 h-24 object-cover rounded-lg'
                                 />
                                 <div className='flex-1 ml-4'>
-                                    <p className='text-lg font-semibold'>{item.product.name}</p>
+                                    <p className='text-lg font-semibold text-blue-500'>{item.product.name}</p>
                                     <p className='text-gray-800 mt-1'>{currency}{item.product.price}</p>
                                     <p className='text-gray-500 mt-1'>Size: {item.productSize}</p>
                                 </div>
@@ -56,11 +58,10 @@ function Cart() {
                                         min={1}
                                         defaultValue={item.quantity}
                                     />
-                                    <img
+                                    <FontAwesomeIcon
                                         onClick={() => deleteCartItem(item._id)}
-                                        className='w-6 h-6 cursor-pointer'
-                                        src={assets.bin_icon}
-                                        alt="Remove"
+                                        className='w-6 h-6 cursor-pointer text-gray-700 hover:text-red-500 transition duration-150'
+                                        icon={faTrashAlt}
                                     />
                                 </div>
                             </div>
@@ -76,19 +77,24 @@ function Cart() {
                     />
                     <p className='text-gray-500 text-xl'>Your cart is currently empty</p>
                 </div>
-            )
-            }
+            )}
+            {/* Buy More Button */}
+            <div className="mt-3 mb-8">
+                <button onClick={() => navigate('/collection')} className="btnForWhiteBg">
+                    EXPLORE MORE PRODUCTS
+                </button>
+            </div>
             <div className="flex justify-end my-20">
                 <div className="w-full sm:w-[450px]">
                     <CartTotal />
                     <div className="w-full text-end">
-                        <button onClick={() => navigate('/place-order')} className='bg-black text-white my-8 px-8 py-3 text-sm active:bg-gray-700'>
+                        <button onClick={() => navigate('/place-order')} className='mt-2 btnForWhiteBg'>
                             PROCEED TO CHECKOUT
                         </button>
                     </div>
                 </div>
             </div>
-        </div >
+        </div>
     );
 }
 
