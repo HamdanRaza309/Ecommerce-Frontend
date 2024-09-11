@@ -5,6 +5,7 @@ import Title from '../components/Title';
 import ProductItem from '../components/ProductItem';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft, faChevronRight, faStar, faCheck } from '@fortawesome/free-solid-svg-icons';
+import { Link } from 'react-router-dom';
 
 function Collection() {
     const { readProducts, search, showSearch } = useContext(ShopContext);
@@ -110,7 +111,9 @@ function Collection() {
                         Vivamus ornare augue lorem at volutpat.
                     </p>
                     <button className="btnForWhiteBg">
-                        ABOUT US
+                        <Link to={'/about'}>
+                            ABOUT US
+                        </Link>
                     </button>
                 </div>
 

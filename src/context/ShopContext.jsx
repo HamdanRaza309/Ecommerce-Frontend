@@ -156,7 +156,7 @@ const ShopContextProvider = ({ children }) => {
             setIsProductsLoaded(true);
             return response.data;
         } catch (error) {
-            toast.error('Error fetching products. Please try again later.');
+            console.log('Error fetching products. Please try again later.');
             return [];
         }
     };
