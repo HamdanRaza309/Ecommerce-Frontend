@@ -8,7 +8,7 @@ export const ShopContext = createContext();
 
 const ShopContextProvider = ({ children }) => {
     const [search, setSearch] = useState('');
-    const [showSearch, setShowSearch] = useState(true);
+    const [showSearch, setShowSearch] = useState(false);
     const [cartItems, setCartItems] = useState([]);
     const [products, setProducts] = useState([]);
     const [isProductsLoaded, setIsProductsLoaded] = useState(false);
@@ -171,7 +171,8 @@ const ShopContextProvider = ({ children }) => {
                 headers: { 'auth-token': `Bearer ${token}` }
             });
             toast.success('Product added successfully.');
-            await readProducts(); // Refresh the product list
+            setIsProductsLoaded(false);
+            await readProducts();
         } catch (error) {
             toast.error('Failed to add product. Please try again.');
         }
@@ -183,7 +184,8 @@ const ShopContextProvider = ({ children }) => {
                 headers: { 'auth-token': `Bearer ${token}` }
             });
             toast.success('Product updated successfully.');
-            await readProducts(); // Refresh the product list
+            setIsProductsLoaded(false);
+            await readProducts();
         } catch (error) {
             toast.error('Failed to update product. Please try again.');
         }
@@ -195,7 +197,8 @@ const ShopContextProvider = ({ children }) => {
                 headers: { 'auth-token': `Bearer ${token}` }
             });
             toast.success('Product deleted successfully.');
-            await readProducts(); // Refresh the product list
+            setIsProductsLoaded(false);
+            await readProducts();
             navigate('/');
         } catch (error) {
             toast.error('Failed to delete product. Please try again.');

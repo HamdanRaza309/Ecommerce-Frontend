@@ -4,7 +4,6 @@ import 'react-toastify/dist/ReactToastify.css';
 import { Route, Routes, useLocation } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
-import SearchBar from './components/SearchBar';
 import Spinner from './components/Spinner';
 import AddProduct from './pages/AddProduct';
 import ScrollManager from './components/ScrollManger';
@@ -31,7 +30,6 @@ const App = () => {
       <ToastContainer />
       <Navbar />
       <div className='px-4 sm:px-[5vw] md:px-[7vw] lg:px-[9vw]'>
-        <SearchBar />
         <Suspense fallback={<Spinner />}>
           <ScrollManager>
             <Routes>

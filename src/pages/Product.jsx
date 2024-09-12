@@ -152,16 +152,17 @@ function Product() {
                             <>
                                 <button
                                     onClick={handleDelete}
-                                    className="py-3 px-6 text-sm font-semibold tracking-wide text-white bg-red-600 border-2 border-transparent rounded-none shadow-[inset_0_0_0_50px_#dc2626] transition ease-in-out duration-300 hover:text-red-600 hover:bg-transparent hover:border-red-600 hover:shadow-[inset_0_0_0_0_#dc2626]"
+                                    className="py-3 px-6 text-sm font-semibold tracking-wide text-white bg-red-500 border-2 border-transparent rounded-none shadow-[inset_0_0_0_50px_#ef4444] transition ease-in-out duration-300 hover:text-red-500 hover:bg-transparent hover:border-red-500 hover:shadow-[inset_0_0_0_0_#ef4444]"
                                 >
                                     DELETE
                                 </button>
                                 <button
                                     onClick={handleUpdate}
-                                    className="py-3 px-6 text-sm font-semibold tracking-wide text-white bg-green-600 border-2 border-transparent rounded-none shadow-[inset_0_0_0_50px_#16a34a] transition ease-in-out duration-300 hover:text-green-600 hover:bg-transparent hover:border-green-600 hover:shadow-[inset_0_0_0_0_#16a34a]"
+                                    className="py-3 px-6 text-sm font-semibold tracking-wide text-white bg-green-500 border-2 border-transparent rounded-none shadow-[inset_0_0_0_50px_#22c55e] transition ease-in-out duration-300 hover:text-green-500 hover:bg-transparent hover:border-green-500 hover:shadow-[inset_0_0_0_0_#22c55e]"
                                 >
                                     UPDATE
                                 </button>
+
                             </>
                         )}
                     </div>
@@ -371,13 +372,13 @@ function Product() {
                                 <button
                                     type="button"
                                     onClick={() => setOpenUpdateModal(false)}
-                                    className="py-3 px-6 text-sm font-semibold tracking-wide text-white bg-gray-600 border-2 border-transparent rounded-none shadow-[inset_0_0_0_50px_#4b5563] transition ease-in-out duration-300 hover:text-gray-600 hover:bg-transparent hover:border-gray-600 hover:shadow-[inset_0_0_0_0_#4b5563]"
+                                    className="py-3 px-6 text-sm font-semibold tracking-wide text-white bg-gray-400 border-2 border-transparent rounded-none shadow-[inset_0_0_0_50px_#9ca3af] transition ease-in-out duration-300 hover:text-gray-400 hover:bg-transparent hover:border-gray-400 hover:shadow-[inset_0_0_0_0_#9ca3af]"
                                 >
                                     Cancel
                                 </button>
                                 <button
                                     type="submit"
-                                    className="py-3 px-6 text-sm font-semibold tracking-wide text-white bg-green-600 border-2 border-transparent rounded-none shadow-[inset_0_0_0_50px_#16a34a] transition ease-in-out duration-300 hover:text-green-600 hover:bg-transparent hover:border-green-600 hover:shadow-[inset_0_0_0_0_#16a34a]"
+                                    className="py-3 px-6 text-sm font-semibold tracking-wide text-white bg-green-500 border-2 border-transparent rounded-none shadow-[inset_0_0_0_50px_#22c55e] transition ease-in-out duration-300 hover:text-green-500 hover:bg-transparent hover:border-green-500 hover:shadow-[inset_0_0_0_0_#22c55e]"
                                 >
                                     Save Changes
                                 </button>
@@ -402,14 +403,14 @@ function Product() {
                             <button
                                 type="button"
                                 onClick={() => setOpenDeleteModal(false)}
-                                className="px-4 py-2 bg-gray-300 text-gray-700 hover:bg-gray-400"
+                                className="py-3 px-6 text-sm font-semibold tracking-wide text-white bg-gray-400 border-2 border-transparent rounded-none shadow-[inset_0_0_0_50px_#9ca3af] transition ease-in-out duration-300 hover:text-gray-400 hover:bg-transparent hover:border-gray-400 hover:shadow-[inset_0_0_0_0_#9ca3af]"
                             >
                                 Cancel
                             </button>
                             <button
                                 type="button"
                                 onClick={handleDeleteProduct}
-                                className="px-4 py-2 bg-red-600 text-white hover:bg-red-700"
+                                className="py-3 px-6 text-sm font-semibold tracking-wide text-white bg-red-500 border-2 border-transparent rounded-none shadow-[inset_0_0_0_50px_#ef4444] transition ease-in-out duration-300 hover:text-red-500 hover:bg-transparent hover:border-red-500 hover:shadow-[inset_0_0_0_0_#ef4444]"
                             >
                                 Yes
                             </button>

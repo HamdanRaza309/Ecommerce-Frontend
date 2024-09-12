@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { ShopContext } from '../context/ShopContext';
 import { assets } from '../frontend_assets/assets';
 import Title from '../components/Title';
@@ -6,6 +6,7 @@ import ProductItem from '../components/ProductItem';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft, faChevronRight, faStar, faCheck } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
+import SearchBar from '../components/SearchBar';
 
 function Collection() {
     const { readProducts, search, showSearch } = useContext(ShopContext);
@@ -16,6 +17,7 @@ function Collection() {
     const [subCategory, setSubCategory] = useState([]);
     const [sortType, setSortType] = useState('relevent');
     const [page, setPage] = useState(1);
+    const productsRef = useRef();
 
     useEffect(() => {
         const fetchedProducts = async () => {
@@ -95,6 +97,14 @@ function Collection() {
         if (selectedPage >= 1 && selectedPage <= Math.ceil(filterProducts.length / 30) && selectedPage !== page) {
             setPage(selectedPage);
         }
+        const offset = 150;
+        const elementPosition = productsRef.current.getBoundingClientRect().top + window.scrollY;
+        const offsetPosition = elementPosition - offset;
+
+        window.scrollTo({
+            top: offsetPosition,
+            behavior: 'smooth'
+        })
     };
 
     return (
@@ -153,7 +163,10 @@ function Collection() {
                     </div>
                 </div>
             </div>
-            <div className="flex flex-col sm:flex-row gap-1 sm:gap-10 pt-10 border-t">
+            <div>
+                <SearchBar />
+            </div>
+            <div ref={productsRef} className="flex flex-col sm:flex-row gap-1 sm:gap-10 pt-10 border-t">
                 {/* Left Side */}
                 <div className="sm:w-60 w-full sm:min-w-[15rem]">
                     <p onClick={() => setShowFilter(!showFilter)} className='cursor-pointer flex gap-2 items-center my-2 text-xl'>

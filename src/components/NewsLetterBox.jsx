@@ -8,7 +8,7 @@ function NewsLetterBox() {
     }
 
     return (
-        <div className="text-center border-b mt-32">
+        <div className="text-center mt-32">
             <p className='text-4xl font-medium'>Subsribe now & get <span className='text-blue-500'>20%</span> Off</p>
             <p className="text-gray-400 mt-3">
                 Join our mailing list for exclusive offers, the latest trends, and 20% off your first order.
