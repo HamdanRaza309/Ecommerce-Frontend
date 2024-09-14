@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft, faChevronRight, faStar, faCheck } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
 import SearchBar from '../components/SearchBar';
+import Spinner from '../components/Spinner'
 
 function Collection() {
     const { readProducts, search, showSearch } = useContext(ShopContext);
@@ -17,10 +18,12 @@ function Collection() {
     const [subCategory, setSubCategory] = useState([]);
     const [sortType, setSortType] = useState('relevent');
     const [page, setPage] = useState(1);
+    const [loading, setLoading] = useState(true);
     const productsRef = useRef();
 
     useEffect(() => {
         const fetchedProducts = async () => {
+            setLoading(true);
             try {
                 const productsData = await readProducts();
                 setProducts(productsData);
@@ -29,6 +32,8 @@ function Collection() {
                 console.error("Failed to fetch products", error);
                 setProducts([]);
                 setFilterProducts([]);
+            } finally {
+                setLoading(false);
             }
         };
 
@@ -163,103 +168,111 @@ function Collection() {
                     </div>
                 </div>
             </div>
-            <div>
-                <SearchBar />
-            </div>
-            <div ref={productsRef} className="flex flex-col sm:flex-row gap-1 sm:gap-10 pt-10 border-t">
-                {/* Left Side */}
-                <div className="sm:w-60 w-full sm:min-w-[15rem]">
-                    <p onClick={() => setShowFilter(!showFilter)} className='cursor-pointer flex gap-2 items-center my-2 text-xl'>
-                        FILTERS
-                        <img className={`h-3 sm:hidden ${showFilter ? 'rotate-90' : ''}`} src={assets.dropdown_icon} alt="dropdown_icon" />
-                    </p>
-
-                    <div className={`border border-gray-300 pl-5 py-3 mt-6 sm:block ${showFilter ? '' : 'hidden'}`}>
-                        <p className='mb-3 text-sm font-medium'>CATEGORIES</p>
-                        <div className="flex flex-col gap-2 text-sm font-light text-gray-700">
-                            <p className="flex gap-2">
-                                <input className='w-3' type="checkbox" value={`Men`} onChange={toggleCategory} /> Men
-                            </p>
-                            <p className="flex gap-2">
-                                <input className='w-3' type="checkbox" value={`Women`} onChange={toggleCategory} /> Women
-                            </p>
-                            <p className="flex gap-2">
-                                <input className='w-3' type="checkbox" value={`Kids`} onChange={toggleCategory} /> Kids
-                            </p>
-                        </div>
-                    </div>
-
-                    <div className={`border border-gray-300 pl-5 py-3 my-5 sm:block ${showFilter ? '' : 'hidden'}`}>
-                        <p className='mb-3 text-sm font-medium'>TYPE</p>
-                        <div className="flex flex-col gap-2 text-sm font-light text-gray-700">
-                            <p className="flex gap-2">
-                                <input className='w-3' type="checkbox" value={`Topwear`} onChange={toggleSubCategory} /> Topwear
-                            </p>
-                            <p className="flex gap-2">
-                                <input className='w-3' type="checkbox" value={`Bottomwear`} onChange={toggleSubCategory} /> Bottomwear
-                            </p>
-                            <p className="flex gap-2">
-                                <input className='w-3' type="checkbox" value={`Winterwear`} onChange={toggleSubCategory} /> Winterwear
-                            </p>
-                        </div>
-                    </div>
+            {loading ? (
+                <div className="flex justify-center items-center min-h-[500px]">
+                    <Spinner />
                 </div>
-
-                {/* Right Side */}
-                <div className="flex-1">
-                    <div className="flex flex-col lg:flex-row justify-between text-base sm:text-2xl mb-4">
-                        <Title text1={'ALL'} text2={'COLLECTIONS'} />
-
-                        <select onChange={(e) => setSortType(e.target.value)} className='border border-gray-300 text-sm px-2'>
-                            <option value="relevent">Sort by: Relevent</option>
-                            <option value="low-high">Sort by: Low to High</option>
-                            <option value="high-low">Sort by: High to Low</option>
-                        </select>
+            ) : (
+                <>
+                    <div>
+                        <SearchBar />
                     </div>
+                    <div ref={productsRef} className="flex flex-col sm:flex-row gap-1 sm:gap-10 pt-10 border-t">
+                        {/* Left Side */}
+                        <div className="sm:w-60 w-full sm:min-w-[15rem]">
+                            <p onClick={() => setShowFilter(!showFilter)} className='cursor-pointer flex gap-2 items-center my-2 text-xl'>
+                                FILTERS
+                                <img className={`h-3 sm:hidden ${showFilter ? 'rotate-90' : ''}`} src={assets.dropdown_icon} alt="dropdown_icon" />
+                            </p>
 
-                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 gap-y-6">
-                        {filterProducts.slice(page * 30 - 30, page * 30).map((item, index) => (
-                            <ProductItem
-                                key={index}
-                                id={item._id}
-                                images={item.images}
-                                name={item.name}
-                                price={item.price}
-                            />
-                        ))}
-                    </div>
-                    {filterProducts.length > 0 && (
-                        <div className='flex flex-col items-center'>
-                            <div className="flex justify-center items-center mt-6 space-x-2">
-                                <button
-                                    onClick={() => handleSelectPage(page - 1)}
-                                    className={`cursor-pointer text-lg sm:text-xl p-2 rounded-full ${page === 1 ? 'text-gray-400' : 'text-gray-600 hover:text-gray-800'} transition duration-200 ${page === 1 ? 'pointer-events-none' : ''}`}
-                                >
-                                    <FontAwesomeIcon icon={faChevronLeft} />
-                                </button>
-                                {
-                                    [...Array(Math.ceil(filterProducts.length / 30))].map((_, i) => (
-                                        <button
-                                            onClick={() => handleSelectPage(i + 1)}
-                                            key={i}
-                                            className={`w-8 sm:w-10 px-2 py-1 text-sm lg:text-base ${page === i + 1 ? 'bg-yellow-400 text-white' : 'bg-gray-300 text-gray-700 hover:bg-gray-400 hover:text-white'} transition duration-200`}
-                                        >
-                                            {i + 1}
-                                        </button>
-                                    ))
-                                }
-                                <button
-                                    onClick={() => handleSelectPage(page + 1)}
-                                    className={`cursor-pointer text-lg sm:text-xl p-2 rounded-full ${page === Math.ceil(filterProducts.length / 30) ? 'text-gray-400' : 'text-gray-600 hover:text-gray-800'} transition duration-200 ${page === Math.ceil(filterProducts.length / 30) ? 'pointer-events-none' : ''}`}
-                                >
-                                    <FontAwesomeIcon icon={faChevronRight} />
-                                </button>
+                            <div className={`border border-gray-300 pl-5 py-3 mt-6 sm:block ${showFilter ? '' : 'hidden'}`}>
+                                <p className='mb-3 text-sm font-medium'>CATEGORIES</p>
+                                <div className="flex flex-col gap-2 text-sm font-light text-gray-700">
+                                    <p className="flex gap-2">
+                                        <input className='w-3' type="checkbox" value={`Men`} onChange={toggleCategory} /> Men
+                                    </p>
+                                    <p className="flex gap-2">
+                                        <input className='w-3' type="checkbox" value={`Women`} onChange={toggleCategory} /> Women
+                                    </p>
+                                    <p className="flex gap-2">
+                                        <input className='w-3' type="checkbox" value={`Kids`} onChange={toggleCategory} /> Kids
+                                    </p>
+                                </div>
                             </div>
-                            <h1 className="text-sm">Products from {Math.min(page * 30 - 29, filterProducts.length)} to {Math.min(page * 30, filterProducts.length)}</h1>
+
+                            <div className={`border border-gray-300 pl-5 py-3 my-5 sm:block ${showFilter ? '' : 'hidden'}`}>
+                                <p className='mb-3 text-sm font-medium'>TYPE</p>
+                                <div className="flex flex-col gap-2 text-sm font-light text-gray-700">
+                                    <p className="flex gap-2">
+                                        <input className='w-3' type="checkbox" value={`Topwear`} onChange={toggleSubCategory} /> Topwear
+                                    </p>
+                                    <p className="flex gap-2">
+                                        <input className='w-3' type="checkbox" value={`Bottomwear`} onChange={toggleSubCategory} /> Bottomwear
+                                    </p>
+                                    <p className="flex gap-2">
+                                        <input className='w-3' type="checkbox" value={`Winterwear`} onChange={toggleSubCategory} /> Winterwear
+                                    </p>
+                                </div>
+                            </div>
                         </div>
-                    )}
-                </div>
-            </div>
+
+                        {/* Right Side */}
+                        <div className="flex-1">
+                            <div className="flex flex-col lg:flex-row justify-between text-base sm:text-2xl mb-4">
+                                <Title text1={'ALL'} text2={'COLLECTIONS'} />
+
+                                <select onChange={(e) => setSortType(e.target.value)} className='border border-gray-300 text-sm px-2'>
+                                    <option value="relevent">Sort by: Relevent</option>
+                                    <option value="low-high">Sort by: Low to High</option>
+                                    <option value="high-low">Sort by: High to Low</option>
+                                </select>
+                            </div>
+
+                            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 gap-y-6">
+                                {filterProducts.slice(page * 30 - 30, page * 30).map((item, index) => (
+                                    <ProductItem
+                                        key={index}
+                                        id={item._id}
+                                        images={item.images}
+                                        name={item.name}
+                                        price={item.price}
+                                    />
+                                ))}
+                            </div>
+                            {filterProducts.length > 0 && (
+                                <div className='flex flex-col items-center'>
+                                    <div className="flex justify-center items-center mt-6 space-x-2">
+                                        <button
+                                            onClick={() => handleSelectPage(page - 1)}
+                                            className={`cursor-pointer text-lg sm:text-xl p-2 rounded-full ${page === 1 ? 'text-gray-400' : 'text-gray-600 hover:text-gray-800'} transition duration-200 ${page === 1 ? 'pointer-events-none' : ''}`}
+                                        >
+                                            <FontAwesomeIcon icon={faChevronLeft} />
+                                        </button>
+                                        {
+                                            [...Array(Math.ceil(filterProducts.length / 30))].map((_, i) => (
+                                                <button
+                                                    onClick={() => handleSelectPage(i + 1)}
+                                                    key={i}
+                                                    className={`w-8 sm:w-10 px-2 py-1 text-sm lg:text-base ${page === i + 1 ? 'bg-yellow-400 text-white' : 'bg-gray-300 text-gray-700 hover:bg-gray-400 hover:text-white'} transition duration-200`}
+                                                >
+                                                    {i + 1}
+                                                </button>
+                                            ))
+                                        }
+                                        <button
+                                            onClick={() => handleSelectPage(page + 1)}
+                                            className={`cursor-pointer text-lg sm:text-xl p-2 rounded-full ${page === Math.ceil(filterProducts.length / 30) ? 'text-gray-400' : 'text-gray-600 hover:text-gray-800'} transition duration-200 ${page === Math.ceil(filterProducts.length / 30) ? 'pointer-events-none' : ''}`}
+                                        >
+                                            <FontAwesomeIcon icon={faChevronRight} />
+                                        </button>
+                                    </div>
+                                    <h1 className="text-sm">Products from {Math.min(page * 30 - 29, filterProducts.length)} to {Math.min(page * 30, filterProducts.length)}</h1>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                </>
+            )}
         </>
     );
 }

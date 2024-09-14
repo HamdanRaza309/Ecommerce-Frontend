@@ -2,6 +2,8 @@ import React from 'react'
 import Title from "../components/Title";
 import { assets } from "../frontend_assets/assets";
 import NewsLetterBox from '../components/NewsLetterBox'
+import BusinessFocus from '../components/BusinessFocus';
+import Achievements from '../components/Achievements';
 
 function About() {
     return (
@@ -47,8 +49,9 @@ function About() {
                     </p>
                 </div>
             </div>
-
+            <Achievements />
             <NewsLetterBox />
+            <BusinessFocus />
         </div>
     )
 }

@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faDollarSign, faUsers, faStar } from '@fortawesome/free-solid-svg-icons';
 import Title from './Title';
+import { assets } from '../frontend_assets/assets';
 
 const Achievements = () => {
 
@@ -30,25 +31,35 @@ const Achievements = () => {
     ];
 
     return (
-        <div className='shadow-lg  py-12'>
-            <div className='text-center my-5'>
+        <div className='bg-yellow-300 shadow-lg pt-8 pb-16'>
+            <div className='flex flex-col justify-center items-center mt-10 mb-16 p-4 md:p-6 lg:p-10'>
                 <Title text1={'OUR'} text2={'ACHIEVEMENTS'} />
+                <p className='text-center text-md md:text-lg lg:text-lg mt-4 text-gray-600'>
+                    Achievements that reflect our growth, customer satisfaction, and performance over the years.
+                </p>
             </div>
+
+            {/* Achievements Section */}
             <div className="flex flex-wrap justify-center items-center gap-12">
-                {data.map((achievement) => (
+                {data.map((achievement, index) => (
                     <div
                         key={achievement.id}
-                        className="relative w-60 h-60 bg-yellow-400 rounded-full shadow-lg flex flex-col justify-center items-center transform transition-all duration-500 hover:scale-110 hover:shadow-2xl hover:rotate-6"
+                        className={`flex flex-col md:flex-row items-center justify-between w-full md:w-2/3 lg:w-1/2 p-6 border bg-blue-100 transform transition-transform duration-500 hover:scale-105 relative ${index % 2 === 0 ? 'rotate-3' : '-rotate-3'}`}
                         style={{ perspective: 1000 }}
                     >
-                        <FontAwesomeIcon
-                            icon={achievement.icon}
-                            size="3x"
-                            className="text-white mb-2 transform transition-transform duration-500 hover:rotate-12 hover:scale-125"
-                        />
-                        <h3 className="text-2xl font-semibold text-gray-700 tracking-wider">{achievement.title}</h3>
-                        <p className="text-3xl font-extrabold text-white">{achievement.value}</p>
-                        <p className="text-sm text-gray-700 text-center absolute bottom-4 w-40">{achievement.description}</p>
+                        <div className='flex-1 text-center md:text-left p-4'>
+                            <FontAwesomeIcon
+                                icon={achievement.icon}
+                                size="3x"
+                                className="text-yellow-400 mb-4 transform transition-transform duration-500 hover:rotate-12 hover:scale-125"
+                            />
+                            <h3 className="text-2xl font-bold text-gray-700 tracking-wider">{achievement.title}</h3>
+                            <p className="text-3xl font-bold text-blue-500">{achievement.value}</p>
+                            <p className="text-lg text-gray-600">{achievement.description}</p>
+                        </div>
+                        <div className='flex-1 relative transform -rotate-6'>
+                            <img src={assets.about_img} alt="" className='h-48 w-48 object-cover transform transition-transform duration-500 hover:rotate-3 hover:scale-105' />
+                        </div>
                     </div>
                 ))}
             </div>
